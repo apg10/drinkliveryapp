@@ -17,3 +17,4 @@
 - BE-005 executed: public product detail endpoint added at GET /api/public/{tenant_slug}/products/{product_slug}/ with active filtering, tenant/category isolation, and 10 API tests. All 30 tests passing.
 - BE-006 executed: delivery app created with DeliveryZone model, admin registration, GET /api/public/{tenant_slug}/delivery-zones/ endpoint, serialization, and delivery model/API tests.
 - Block 2 cleanup applied: added missing BE-003 and block reports, changed product/category slug uniqueness to per-tenant constraints, removed dead ProductVariant validation, and removed duplicate delivery model tests from API test file.
+- Prepared local AI prompts for Block 3: BE-007 through BE-009 plus Block 3 summary.
