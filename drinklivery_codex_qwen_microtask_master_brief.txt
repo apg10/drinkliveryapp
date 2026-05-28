@@ -1,0 +1,997 @@
+DRINKLIVERY — CODEX MASTER ARCHITECT / QWEN MICROTASK PLANNER BRIEF
+Version: 1.0
+Purpose: Give Codex the authority and context to design the technical architecture and generate implementation-ready microtasks for Qwen/local AI from the start.
+
+================================================================================
+1. PROJECT SUMMARY
+================================================================================
+
+Project name: Drinklivery
+
+Drinklivery is a premium cocktail delivery platform focused on ready-to-serve cocktail packs, cocktail kits, mocktail packs and event-oriented bundles.
+
+The initial pilot market is Panama.
+
+The product must NOT be positioned as a liquor bottle delivery app. The MVP does not sell standalone liquor bottles. The product is a premium cocktail experience delivered to homes, Airbnbs, small events, birthdays, after-office gatherings and private meetings.
+
+Core concept:
+- Digital-first premium cocktail brand.
+- Local operation handled by a bartender/operator in Panama.
+- Software owned by Lazy Software / Adrian.
+- Operation may use the software under agreement, license, participation or pilot arrangement.
+- The software must remain reusable for future markets.
+
+Strategic principle:
+Drinklivery is not only a cocktail business. It is a reusable software vertical for premium beverage/event delivery operations.
+
+================================================================================
+2. OWNERSHIP AND BUSINESS STRUCTURE
+================================================================================
+
+Software ownership:
+- The app, backend, frontend, database structure, operational workflows, API design, admin panel, driver/compliance logic and future SaaS capabilities belong to Adrian / Lazy Software.
+- The Panama operating partner does not automatically own the software.
+
+Panama operating partner:
+- Local bartender/operator.
+- Responsible for permits, local preparation, recipes, inventory, suppliers, sanitary handling, local delivery coordination and alcohol-related compliance.
+- Responsible for validating what is legally required in Panama before real sales.
+
+Business separation:
+1. Software platform: owned by Lazy Software / Adrian.
+2. Local operation: handled by Panama operator.
+3. Brand: should be structured carefully so it can expand beyond Panama.
+
+Recommended positioning:
+"Premium cocktail experiences delivered."
+
+Operational language:
+Use "authorized micro-lab for premium cocktail delivery and scheduled digital orders" instead of informal language like "selling cocktails from home."
+
+================================================================================
+3. MVP BUSINESS RULES
+================================================================================
+
+These rules are locked for the MVP:
+
+1. Drinklivery does not sell standalone liquor bottles in the MVP.
+2. Drinklivery sells:
+   - ready-to-serve cocktail packs
+   - cocktail kits
+   - mocktail packs
+   - event-oriented bundles
+3. Orders are scheduled by default, not instant-delivery-first.
+4. Customers must confirm legal drinking age before placing alcoholic orders.
+5. Alcoholic orders require in-person delivery/handoff.
+6. Alcoholic orders cannot be left at reception, door, lobby, concierge or with minors.
+7. The admin/operator can reject orders if area, schedule, availability or compliance rules are not met.
+8. MVP starts with one tenant: Drinklivery Panama.
+9. The system must be architected as single-market MVP, multi-market-ready.
+10. Payment integrations are not part of the first backend milestones.
+11. WhatsApp API integration is not part of the first backend milestones.
+12. The initial system may use manual payment tracking.
+13. The app must support delivery zones and scheduled delivery windows.
+14. The app must support order state tracking.
+15. Compliance data must be handled carefully. Do not store sensitive ID document images in the MVP.
+
+================================================================================
+4. COMPLIANCE RULES
+================================================================================
+
+Compliance rules for MVP:
+
+1. Customer must confirm legal drinking age before placing an alcoholic order.
+2. Alcoholic orders require in-person handoff.
+3. Receiver document must be checked at delivery.
+4. If receiver is underage, unavailable or visibly intoxicated, the order must not be delivered.
+5. The system must allow marking an order as FAILED_AGE_VERIFICATION.
+6. Delivery verification must record:
+   - receiver name
+   - whether document was checked
+   - adult verification result
+   - timestamp
+   - operator/driver/admin who verified
+7. The app must display responsible drinking messaging.
+8. The app must support configurable operating hours.
+9. The app must support disabling orders for restricted dates or unavailable dates later.
+10. MVP must avoid storing sensitive document images.
+11. Legal implementation details must be verified locally by the Panama operating partner before launch.
+
+================================================================================
+5. CODEX ROLE
+================================================================================
+
+Codex is NOT only a coding executor.
+
+Codex must act as:
+1. Technical architect
+2. Backend planner
+3. Microtask designer for Qwen/local AI
+4. Reviewer of Qwen output
+5. Test enforcement agent
+6. Documentation updater
+
+Codex must produce implementation-ready microtasks for Qwen from the start.
+
+Qwen/local AI should NOT make major architecture decisions.
+Qwen should execute narrowly scoped tasks created by Codex.
+
+Codex must decide:
+- Django app boundaries
+- models
+- serializers
+- views/viewsets
+- endpoints
+- tests
+- fixtures
+- validation rules
+- admin registrations
+- task order
+- allowed files per microtask
+- forbidden files per microtask
+- expected test commands
+- expected completion report format
+
+================================================================================
+6. QWEN ROLE
+================================================================================
+
+Qwen is the local coding worker.
+
+Qwen should:
+- execute one microtask at a time
+- only edit explicitly allowed files
+- write or update tests for every backend behavior
+- run relevant tests
+- write a Markdown report after each task
+- not make architecture decisions
+- not add dependencies without approval
+- not refactor unrelated files
+- not push to remote
+- not use git add .
+- stop and report ambiguity if a task is underspecified
+
+Qwen output should be reviewed by Codex before merging/committing.
+
+================================================================================
+7. STACK DECISION
+================================================================================
+
+Backend stack:
+- Python
+- Django
+- Django REST Framework
+- pytest
+- pytest-django
+- SQLite for initial local development
+- PostgreSQL later
+- django-cors-headers
+- python-dotenv or django-environ
+
+Frontend stack later:
+- React
+- Vite
+- mobile-first storefront
+- admin panel later
+
+Do not add yet:
+- Docker
+- Kubernetes
+- Celery
+- Redis
+- Stripe
+- WhatsApp API
+- native mobile app
+- complex multi-tenant billing
+- advanced inventory
+- loyalty system
+- AI recommendation features
+
+Backend architecture:
+- Modular Django monolith.
+- Single settings.py at first.
+- Multi-market-ready data model without building full SaaS complexity immediately.
+- Start with one tenant: Drinklivery Panama.
+
+================================================================================
+8. TARGET REPOSITORY STRUCTURE
+================================================================================
+
+Monorepo target:
+
+drinklivery/
+  ai_context/
+    00-PLAN.md
+    01-HANDOFF.md
+    02-LOG.md
+    03-WORKER-PROTOCOL.md
+    04-APP-BRIEF.md
+    05-BUSINESS-RULES.md
+    06-COMPLIANCE-RULES.md
+    07-DATA-MODEL-DRAFT.md
+    08-MVP-SCOPE.md
+    09-LOCAL-MODEL-TASK-QUEUE.md
+    10-CODEX-TASKS.md
+    11-QWEN-REPORTS/
+    12-DECISIONS.md
+    13-ARCHITECTURE.md
+    14-ENDPOINT-MATRIX.md
+    15-TEST-PLAN.md
+
+  backend/
+    manage.py
+    requirements.txt
+    .env.example
+    pytest.ini
+
+    config/
+      __init__.py
+      settings.py
+      urls.py
+      asgi.py
+      wsgi.py
+
+    apps/
+      __init__.py
+      core/
+      accounts/
+      tenants/
+      products/
+      orders/
+      delivery/
+      payments/
+      compliance/
+      notifications/
+
+  frontend/
+    .gitkeep
+
+  docs/
+    business/
+    technical/
+    legal/
+
+  README.md
+  .gitignore
+
+================================================================================
+9. BACKEND DJANGO APPS
+================================================================================
+
+Apps and responsibilities:
+
+1. apps.core
+   - health endpoint
+   - shared utilities if needed
+   - no business logic initially
+
+2. apps.accounts
+   - internal users
+   - admin/operator/bartender/driver roles later
+   - start with Django User unless there is a strong reason to customize
+
+3. apps.tenants
+   - Tenant
+   - StorefrontSettings
+   - OperatingSchedule
+   - single initial tenant: drinklivery-panama
+   - multi-market-ready but not overengineered
+
+4. apps.products
+   - Category
+   - Product
+   - ProductVariant
+   - future Pack/PackItem if separated from products
+   - only active products shown publicly
+
+5. apps.orders
+   - Customer
+   - Address
+   - Order
+   - OrderItem
+   - OrderStatusHistory
+   - checkout flow
+
+6. apps.delivery
+   - DeliveryZone
+   - DeliveryFeeRule later
+   - DeliveryAssignment later
+   - delivery fee calculation
+
+7. apps.payments
+   - PaymentMethod
+   - PaymentRecord
+   - manual payments first
+   - no Stripe/Yappy integration in early milestones
+
+8. apps.compliance
+   - AgeConfirmation or age fields on Order
+   - DeliveryVerification
+   - ComplianceEvent
+   - failed age verification workflow
+
+9. apps.notifications
+   - NotificationLog
+   - WhatsApp link/manual logging first
+   - no WhatsApp API yet
+
+================================================================================
+10. INITIAL DATA MODEL DECISIONS
+================================================================================
+
+Codex must refine these into Django models and tests.
+
+Tenant:
+- id
+- name
+- slug
+- country
+- city
+- currency
+- is_active
+- created_at
+- updated_at
+
+StorefrontSettings:
+- id
+- tenant
+- brand_name
+- tagline
+- primary_phone
+- whatsapp_phone
+- is_storefront_enabled
+- responsible_drinking_message
+- created_at
+- updated_at
+
+OperatingSchedule:
+- id
+- tenant
+- weekday
+- opens_at
+- closes_at
+- accepts_orders
+- notes
+
+Category:
+- id
+- tenant
+- name
+- slug
+- description
+- display_order
+- is_active
+- created_at
+- updated_at
+
+Product:
+- id
+- tenant
+- category
+- name
+- slug
+- description
+- base_price
+- image optional
+- alcohol_percentage_note
+- servings
+- is_alcoholic
+- is_active
+- display_order
+- created_at
+- updated_at
+
+ProductVariant:
+- id
+- product
+- name
+- servings
+- price
+- is_active
+- display_order
+- created_at
+- updated_at
+
+Customer:
+- id
+- full_name
+- phone
+- email optional
+- created_at
+- updated_at
+
+Address:
+- id
+- customer
+- address_line
+- building_details
+- city
+- delivery_notes
+- created_at
+- updated_at
+
+DeliveryZone:
+- id
+- tenant
+- name
+- city
+- base_fee
+- minimum_order_amount
+- is_active
+- created_at
+- updated_at
+
+Order:
+- id
+- tenant
+- customer
+- address
+- order_code
+- status
+- scheduled_date
+- scheduled_time_window
+- delivery_zone
+- subtotal
+- delivery_fee
+- total
+- payment_method
+- payment_status
+- customer_notes
+- age_confirmed_by_customer
+- terms_accepted
+- created_at
+- updated_at
+
+OrderItem:
+- id
+- order
+- product
+- variant
+- quantity
+- unit_price
+- total_price
+- created_at
+
+OrderStatusHistory:
+- id
+- order
+- previous_status
+- new_status
+- changed_by optional
+- note
+- created_at
+
+PaymentRecord:
+- id
+- order
+- method
+- status
+- amount
+- reference
+- notes
+- confirmed_at
+- created_at
+- updated_at
+
+DeliveryVerification:
+- id
+- order
+- receiver_name
+- receiver_document_checked
+- receiver_is_adult
+- verified_by optional
+- verification_notes
+- delivered_at
+- created_at
+
+ComplianceEvent:
+- id
+- order
+- event_type
+- notes
+- created_at
+
+NotificationLog:
+- id
+- order
+- channel
+- destination
+- message_type
+- status
+- created_at
+
+================================================================================
+11. ORDER STATUSES
+================================================================================
+
+Initial order statuses:
+
+PENDING
+ACCEPTED
+IN_PREPARATION
+READY_FOR_DELIVERY
+OUT_FOR_DELIVERY
+DELIVERED
+CANCELLED
+REJECTED
+FAILED_AGE_VERIFICATION
+
+Rules:
+- New checkout order starts as PENDING.
+- Admin can accept or reject.
+- Delivered alcoholic orders require delivery verification.
+- Failed age verification must be available as a terminal status.
+- Status changes should create OrderStatusHistory records once status workflow exists.
+
+================================================================================
+12. PAYMENT STATUSES
+================================================================================
+
+Initial payment statuses:
+
+PENDING
+CONFIRMED
+FAILED
+REFUNDED
+CANCELLED
+
+Payment methods initially:
+- CASH
+- TRANSFER
+- YAPPY_MANUAL
+- OTHER_MANUAL
+
+Do not implement actual payment gateway yet.
+
+================================================================================
+13. PUBLIC API ENDPOINTS
+================================================================================
+
+Initial public storefront endpoints:
+
+GET /api/health/
+
+GET /api/public/{tenant_slug}/catalog/
+- returns active categories/products/variants for tenant
+- excludes inactive products
+- ordered by display_order
+
+GET /api/public/{tenant_slug}/products/{product_slug}/
+- returns product detail if active and belongs to tenant
+
+GET /api/public/{tenant_slug}/delivery-zones/
+- returns active delivery zones for tenant
+
+POST /api/public/{tenant_slug}/orders/
+- creates customer/address/order/order items
+- validates cart
+- validates active product/variant
+- validates delivery zone
+- validates age confirmation when alcoholic products are present
+- validates terms acceptance
+- calculates subtotal, delivery fee and total
+- creates order with PENDING status
+
+GET /api/public/{tenant_slug}/orders/{order_code}/status/
+- returns safe public order status
+- does not expose admin/internal details
+
+================================================================================
+14. ADMIN API ENDPOINTS
+================================================================================
+
+Initial admin endpoints:
+
+GET /api/admin/orders/
+GET /api/admin/orders/{id}/
+PATCH /api/admin/orders/{id}/status/
+PATCH /api/admin/orders/{id}/payment/
+POST /api/admin/orders/{id}/delivery-verification/
+GET /api/admin/products/
+POST /api/admin/products/
+PATCH /api/admin/products/{id}/
+GET /api/admin/dashboard/summary/
+
+Authentication can be deferred until after core models/endpoints if needed, but admin endpoints must eventually be protected.
+
+For early backend milestones, Django Admin can be used before building full admin API.
+
+================================================================================
+15. TESTING STRATEGY
+================================================================================
+
+Testing framework:
+- pytest
+- pytest-django
+- DRF APIClient
+
+Testing principles:
+1. Every model behavior must have tests where meaningful.
+2. Every public endpoint must have API tests.
+3. Every business rule must have tests.
+4. Every compliance-sensitive rule must have tests.
+5. Qwen must run relevant tests before reporting task completion.
+6. Codex must review test coverage before approving.
+
+Minimum test categories:
+- health endpoint
+- tenant model
+- storefront settings
+- catalog listing
+- product active/inactive filtering
+- tenant isolation
+- delivery zones
+- checkout order creation
+- subtotal/total calculation
+- age confirmation required for alcoholic orders
+- terms acceptance required
+- inactive product rejection
+- invalid variant rejection
+- order status transition
+- order status history
+- payment record update
+- delivery verification
+- failed age verification
+- dashboard summary
+
+================================================================================
+16. BACKEND ROADMAP / MICROTASK QUEUE
+================================================================================
+
+Codex must generate detailed Qwen microtasks from this roadmap.
+
+BE-001 — Backend skeleton + health endpoint
+- Create Django project under backend/
+- Configure DRF, CORS, pytest
+- Add /api/health/
+- Add tests
+- No business models
+
+BE-002 — Tenants app foundation
+- Create tenants app
+- Tenant model
+- StorefrontSettings model
+- OperatingSchedule model if appropriate
+- Admin registration
+- Model tests
+- Migration
+
+BE-003 — Products catalog models
+- Create products app
+- Category model
+- Product model
+- ProductVariant model
+- Admin registration
+- Model tests
+- Migration
+
+BE-004 — Public catalog endpoint
+- Serializers for category/product/variant
+- GET /api/public/{tenant_slug}/catalog/
+- Active filtering
+- Tenant isolation
+- Tests
+
+BE-005 — Product detail endpoint
+- GET /api/public/{tenant_slug}/products/{product_slug}/
+- Active-only product detail
+- Tenant isolation
+- Tests
+
+BE-006 — Delivery zones
+- Create delivery app
+- DeliveryZone model
+- Admin registration
+- Public delivery zones endpoint
+- Tests
+
+BE-007 — Orders foundation
+- Create orders app
+- Customer model
+- Address model
+- Order model
+- OrderItem model
+- Order code generation
+- Admin registration
+- Model tests
+
+BE-008 — Checkout endpoint
+- POST /api/public/{tenant_slug}/orders/
+- Create customer/address/order/order items
+- Validate cart
+- Validate product/variant active
+- Calculate totals
+- Validate delivery zone
+- Tests
+
+BE-009 — Alcohol age confirmation rules
+- Ensure checkout detects alcoholic products
+- Require age_confirmed_by_customer for alcoholic orders
+- Require terms_accepted
+- Tests
+
+BE-010 — Order status history
+- OrderStatusHistory model
+- status transition helper/service
+- History creation
+- Tests
+
+BE-011 — Public order status endpoint
+- GET /api/public/{tenant_slug}/orders/{order_code}/status/
+- Safe public response
+- Tests
+
+BE-012 — Manual payment records
+- Create payments app
+- PaymentRecord model
+- Manual payment status update behavior
+- Tests
+
+BE-013 — Compliance delivery verification
+- Create compliance app
+- DeliveryVerification model
+- ComplianceEvent model if useful
+- Delivery verification rules
+- FAILED_AGE_VERIFICATION path
+- Tests
+
+BE-014 — Admin order endpoints
+- List orders
+- Retrieve order detail
+- Update order status
+- Update payment status
+- Submit delivery verification
+- Tests
+- Authentication may be basic/session/token depending on architecture decision
+
+BE-015 — Dashboard summary
+- Basic summary endpoint
+- Total orders
+- Pending orders
+- Revenue from confirmed/delivered orders
+- Orders by status
+- Tests
+
+BE-016 — Seed data
+- Management command or fixtures for initial tenant, categories, products and zones
+- Tests if appropriate
+
+BE-017 — Deployment preparation
+- .env.example refinement
+- production settings decision
+- allowed hosts/CORS docs
+- README run instructions
+- no premature infrastructure complexity
+
+================================================================================
+17. MICROTASK FORMAT CODEX MUST CREATE FOR QWEN
+================================================================================
+
+Each Qwen microtask must use this template:
+
+TASK ID:
+Example: BE-004
+
+TITLE:
+Short descriptive title.
+
+OBJECTIVE:
+One clear intention only.
+
+CONTEXT FILES TO READ:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/06-COMPLIANCE-RULES.md
+- ai_context/13-ARCHITECTURE.md
+- relevant source files
+
+ALLOWED FILES TO MODIFY:
+List exact files or folders.
+
+FORBIDDEN FILES:
+List important files/folders Qwen must not touch.
+
+IMPLEMENTATION REQUIREMENTS:
+Precise bullet points.
+
+TEST REQUIREMENTS:
+Specific test files and behaviors.
+
+COMMANDS TO RUN:
+Example:
+- cd backend
+- pytest apps/products/tests/test_catalog_api.py
+
+REPORT FILE:
+ai_context/11-QWEN-REPORTS/{task-id}-{short-name}.md
+
+REPORT MUST INCLUDE:
+1. Summary
+2. Files changed
+3. Tests added/updated
+4. Test command run
+5. Test result
+6. Notes/risks
+7. Whether task is ready for Codex review
+
+GIT RULES:
+- Do not push.
+- Do not use git add .
+- Do not commit unless explicitly instructed.
+- If committing is approved, stage files explicitly.
+
+STOP CONDITIONS:
+- Missing architecture decision
+- Failing tests that cannot be resolved within scope
+- Need to modify forbidden files
+- Need for new dependency
+- Ambiguous business/compliance rule
+
+================================================================================
+18. REQUIRED CODEX OUTPUT BEFORE QWEN STARTS CODING
+================================================================================
+
+Before giving coding tasks to Qwen, Codex must create/update:
+
+1. ai_context/13-ARCHITECTURE.md
+   - Backend architecture
+   - App boundaries
+   - Data model summary
+   - API principles
+   - Testing principles
+
+2. ai_context/14-ENDPOINT-MATRIX.md
+   - Endpoint
+   - Method
+   - Auth requirement
+   - Request shape summary
+   - Response shape summary
+   - App responsible
+   - Milestone
+
+3. ai_context/15-TEST-PLAN.md
+   - Test categories
+   - Required model tests
+   - Required API tests
+   - Compliance tests
+   - Checkout tests
+   - Admin tests
+
+4. ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+   - Full Qwen task queue
+   - BE-001 through at least BE-010 in detailed form
+   - BE-011 onward can be summarized initially but should be planned
+
+5. ai_context/10-CODEX-TASKS.md
+   - Codex review checklist
+   - What Codex will inspect after each Qwen task
+
+Codex must not leave architecture decisions vague for Qwen.
+
+================================================================================
+19. FIRST CODEX PROMPT
+================================================================================
+
+Use this prompt in Codex:
+
+You are the master technical architect and PM for Drinklivery.
+
+Project:
+Drinklivery is a premium cocktail delivery MVP for ready-to-serve cocktail packs, cocktail kits, mocktail packs and event-oriented bundles. The initial pilot market is Panama. The software is owned by Lazy Software / Adrian. A local bartender/operator in Panama will handle permits, preparation, local operations and compliance.
+
+Important:
+You are not only creating code. Your first responsibility is to create the backend architecture and generate implementation-ready microtasks for Qwen/local AI. Qwen must not make major architecture decisions. Qwen should execute narrow tasks created by you.
+
+Goal:
+Prepare the backend development plan so Qwen can start implementing microtasks safely.
+
+Task:
+Create or update the project context and backend architecture documents. Do not implement backend code yet unless the repository has no structure and you need minimal folders/placeholders.
+
+Required outputs:
+1. ai_context/13-ARCHITECTURE.md
+2. ai_context/14-ENDPOINT-MATRIX.md
+3. ai_context/15-TEST-PLAN.md
+4. ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+5. ai_context/10-CODEX-TASKS.md
+
+You must include:
+- Django app boundaries
+- model decisions
+- endpoint decisions
+- serializer/view/viewset strategy
+- testing strategy
+- Qwen microtasks from BE-001 onward
+- exact allowed files per microtask
+- exact test expectations per microtask
+- report requirements for Qwen
+- Codex review checklist
+
+Architecture decisions:
+- Backend stack: Django + DRF + pytest + pytest-django.
+- Initial DB: SQLite for local development.
+- Later DB: PostgreSQL.
+- Architecture: modular Django monolith.
+- No Docker yet.
+- No Celery yet.
+- No Stripe/payment gateway yet.
+- No WhatsApp API yet.
+- No frontend implementation yet.
+- Single tenant initially: Drinklivery Panama.
+- Multi-market-ready model design.
+- MVP does not sell standalone liquor bottles.
+- MVP sells cocktail packs, kits, mocktail packs and event bundles.
+- Alcoholic orders require age confirmation and in-person delivery verification.
+- Do not store sensitive ID document images in the MVP.
+
+Rules:
+- Do not over-engineer.
+- Do not implement features outside the MVP.
+- Do not create frontend code.
+- Do not add dependencies unless needed for documentation.
+- Do not push to remote.
+- Do not use git add .
+- Keep the output practical and implementation-ready.
+
+Validation:
+- Show created/modified files.
+- Show the microtask queue summary.
+- Confirm whether Qwen can start with BE-001.
+- If any ambiguity remains, list it explicitly.
+
+================================================================================
+20. FIRST QWEN TASK SHOULD BE BE-001
+================================================================================
+
+BE-001 must be the first implementation task.
+
+Expected BE-001 task summary:
+- Create Django backend skeleton.
+- Configure DRF, CORS, pytest.
+- Add /api/health/.
+- Add test for health endpoint.
+- Do not add business models.
+- Update log/report.
+- Run pytest.
+
+================================================================================
+21. GIT POLICY
+================================================================================
+
+General:
+- Do not push unless explicitly told.
+- Do not use git add .
+- Commit only after tests pass.
+- Stage files explicitly.
+- Prefer small commits per completed milestone.
+
+Example commit after BE-001:
+git add backend/config backend/apps/core backend/manage.py backend/requirements.txt backend/pytest.ini backend/.env.example ai_context/02-LOG.md ai_context/11-QWEN-REPORTS/001-backend-skeleton.md
+git commit -m "Initialize Drinklivery backend skeleton"
+
+================================================================================
+22. SUCCESS CRITERIA FOR THIS PLANNING PHASE
+================================================================================
+
+The planning phase is complete when:
+
+1. Codex has created the architecture documents.
+2. Codex has created endpoint matrix.
+3. Codex has created test plan.
+4. Codex has created Qwen microtask queue.
+5. BE-001 is detailed enough for Qwen to execute without asking architecture questions.
+6. Qwen has clear allowed/forbidden file scope.
+7. Qwen has clear test requirements.
+8. Codex has a review checklist for Qwen output.
+
+================================================================================
+23. FINAL INSTRUCTION TO CODEX
+================================================================================
+
+Your job is to remove ambiguity before Qwen starts coding.
+
+Qwen should code.
+Codex should architect, plan, review and enforce quality.
+
+Make the task queue precise enough that Qwen can work like a disciplined junior backend developer following a senior architect's instructions.

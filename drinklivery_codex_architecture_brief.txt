@@ -1,0 +1,1215 @@
+DRINKLIVERY — CODEX ARCHITECTURE BRIEF
+Plain Text Project Context for Codex / Qwen / Local AI Workers
+Version: 0.1
+Prepared for: Adrian / Lazy Software Inc.
+
+================================================================================
+0. PURPOSE OF THIS FILE
+================================================================================
+
+This file gives Codex and local AI workers the full project context needed to plan,
+architect and progressively build the Drinklivery MVP.
+
+Drinklivery is a premium cocktail delivery platform. The initial pilot market is
+Panama. The project must be built as a clean, modular, testable web application
+that can begin as a simple single-market MVP but later evolve into a reusable
+multi-market platform owned by Lazy Software Inc.
+
+This file is intentionally detailed. Local AI workers must read this before
+implementing backend or frontend tasks.
+
+IMPORTANT:
+- Do not build the whole app in one task.
+- Use microtasks.
+- One task = one intention.
+- Always preserve the business model and ownership separation.
+- Always preserve compliance-sensitive behavior around alcohol orders.
+- Backend first. Frontend later.
+- Tests are mandatory for backend behavior.
+
+================================================================================
+1. BUSINESS CONTEXT
+================================================================================
+
+Project name:
+Drinklivery
+
+Initial market:
+Panama
+
+Initial operating model:
+A local operating partner in Panama is a bartender and can handle local permits,
+cocktail preparation, sourcing, operations and compliance. Adrian / Lazy Software
+owns the software.
+
+Core business idea:
+Drinklivery is not a liquor bottle delivery app. It is a premium cocktail delivery
+experience focused on:
+- ready-to-serve cocktail packs
+- cocktail kits
+- mocktail packs
+- event-oriented bundles
+- premium packs for meetings, birthdays, Airbnbs, after-office events and home plans
+
+The product is not "alcohol delivery".
+The product is "premium cocktail experiences delivered".
+
+Positioning:
+A digital-first premium cocktail brand powered by its own app, lightweight
+operations and controlled delivery.
+
+Strategic phrase:
+"The bar arrives at your home."
+
+Alternative positioning:
+"Premium cocktails for your gatherings, prepared by a bartender and delivered
+ready to serve."
+
+Business thesis:
+Instead of spending heavily on a physical bar, rent, staff and front-of-house
+infrastructure, Drinklivery uses:
+- a premium mobile-first storefront
+- scheduled ordering
+- controlled production
+- small catalog
+- operating limits
+- compliance-aware delivery
+- software-driven operations
+- strong brand experience through the app
+
+This is meant to reduce infrastructure costs while keeping the business legal,
+premium and scalable.
+
+================================================================================
+2. OWNERSHIP AND SEPARATION OF ASSETS
+================================================================================
+
+Critical decision:
+The app/software belongs to Adrian / Lazy Software Inc.
+
+The Panama operation can use the app under an internal agreement, license,
+commercial arrangement or participation structure, but the local operation must
+not automatically own the software.
+
+Separate the following assets from day one:
+
+A. Software
+Owner:
+- Adrian / Lazy Software Inc.
+
+Includes:
+- source code
+- backend
+- frontend
+- API design
+- database schema
+- admin panel
+- ordering system
+- delivery logic
+- compliance modules
+- analytics
+- future multi-market logic
+- all reusable platform components
+
+B. Panama Operation
+Owner/operator:
+- Local bartender / local operating company
+
+Responsible for:
+- permits
+- alcohol/food compliance
+- preparation
+- recipes
+- sourcing
+- inventory
+- packaging
+- quality control
+- local customer service
+- delivery coordination
+- local taxes/fiscal compliance
+- responsible handoff of alcohol products
+
+C. Brand
+Recommended structure:
+- Global platform/technology brand should remain connected to Adrian / Lazy Software.
+- Local commercial brand can be "Drinklivery Panama", "Drinklivery PTY", "MixLab Panama",
+  or another market-specific name.
+- Do not lock the global software platform to a single local operator.
+
+Core rule:
+The Panama pilot is the first operating case, not the owner of the whole platform.
+
+================================================================================
+3. LEGAL / COMPLIANCE STRATEGY
+================================================================================
+
+Important:
+This project involves alcohol. Compliance must be treated as a first-class
+business requirement. The app must support responsible delivery workflows.
+
+The local partner is responsible for confirming all required permits in Panama.
+
+Do not present the business as:
+"selling cocktails from home"
+
+Use this language instead:
+"authorized micro-lab for premium cocktail preparation, digital scheduled orders
+and controlled delivery"
+
+The software must support:
+- legal drinking age confirmation before checkout
+- responsible drinking messaging
+- in-person handoff for alcoholic orders
+- ID/document check at delivery
+- ability to reject delivery if receiver is underage, absent or visibly intoxicated
+- configurable operating hours
+- configurable delivery zones
+- ability to disable orders on restricted dates
+- order status for failed age verification
+- internal traceability of delivery verification
+
+MVP must avoid storing sensitive document images unless explicitly approved later.
+For MVP, store:
+- receiver name
+- whether document was checked
+- whether receiver is an adult
+- who verified
+- timestamp
+- notes if delivery failed
+
+================================================================================
+4. BUSINESS RULES
+================================================================================
+
+Core rules:
+
+1. Drinklivery does not sell standalone liquor bottles in the MVP.
+2. Drinklivery sells cocktail packs, cocktail kits, mocktail packs and event-oriented bundles.
+3. Orders are scheduled by default, not instant delivery.
+4. Customer must confirm legal drinking age before checkout for alcoholic products.
+5. Alcoholic products require in-person delivery.
+6. Alcoholic orders cannot be left at reception, lobby, door, building entrance or with minors.
+7. Admin/operator can reject orders based on delivery area, schedule, availability or compliance rules.
+8. MVP starts with one tenant/operation: Drinklivery Panama.
+9. The software is owned by Lazy Software / Adrian.
+10. The local operator is responsible for permits, preparation and compliance in Panama.
+11. The app must be mobile-first.
+12. The app must feel premium, controlled and trustworthy.
+13. Production capacity must be limited at the system level.
+14. The system must support order rejection/cancellation.
+15. The system must support delivery verification before marking alcoholic orders as delivered.
+16. The system should support non-alcoholic mocktail products.
+17. Payment can be manual at the beginning.
+18. WhatsApp can be manual/link-based at the beginning.
+19. No marketplace model in the MVP.
+20. No native app in the MVP.
+
+================================================================================
+5. MVP SCOPE
+================================================================================
+
+Included in MVP:
+- mobile-first storefront
+- catalog
+- product categories
+- ready-to-serve cocktail packs
+- cocktail kits
+- mocktail packs
+- event-oriented bundles
+- scheduled checkout
+- customer data capture
+- address capture
+- delivery zone selection
+- manual payment method selection
+- order status tracking
+- admin order management
+- age confirmation
+- delivery verification
+- order status history
+- basic operational dashboard
+- basic seed data
+- responsible drinking messaging
+- configurable delivery zones
+- configurable operating hours or schedule draft
+
+Excluded from MVP:
+- native mobile app
+- marketplace
+- multiple local operators
+- real-time driver map
+- automatic WhatsApp API integration
+- Stripe or card payments
+- loyalty program
+- advanced inventory
+- AI recommendations
+- complex promotions
+- multi-driver dispatch system
+- photo/document storage for ID
+- Kubernetes
+- microservices
+- Celery
+- complex cloud infrastructure
+
+================================================================================
+6. TECHNICAL STACK DECISION
+================================================================================
+
+Recommended backend stack:
+- Python
+- Django
+- Django REST Framework
+- pytest
+- pytest-django
+- SQLite for initial local development
+- PostgreSQL later for staging/production
+- django-cors-headers
+- python-dotenv or django-environ
+
+Recommended frontend stack later:
+- React
+- Vite
+- Tailwind CSS or clean CSS modules
+- Mobile-first layout
+- Netlify or Vercel for deployment
+
+Backend choice:
+Use Django + Django REST Framework, not FastAPI, for this MVP.
+
+Reason:
+This project needs models, admin, users, orders, status, products, compliance logs,
+delivery zones and operational dashboards. Django provides structure and speed
+for business apps.
+
+Architecture:
+- Monolithic modular backend
+- Separate Django apps by domain
+- API-first for frontend
+- Backend-first development
+- Tests required for every business rule
+
+Do not use:
+- microservices
+- Kubernetes
+- Celery
+- Docker as mandatory initial dependency
+- complex settings split before needed
+- premature payment integrations
+
+================================================================================
+7. REPOSITORY STRUCTURE
+================================================================================
+
+Use a monorepo:
+
+drinklivery/
+  ai_context/
+    00-PLAN.md
+    01-HANDOFF.md
+    02-LOG.md
+    03-WORKER-PROTOCOL.md
+    04-APP-BRIEF.md
+    05-BUSINESS-RULES.md
+    06-COMPLIANCE-RULES.md
+    07-DATA-MODEL-DRAFT.md
+    08-MVP-SCOPE.md
+    09-LOCAL-MODEL-TASK-QUEUE.md
+    10-CODEX-TASKS.md
+    11-QWEN-REPORTS/
+    12-DECISIONS.md
+
+  backend/
+    manage.py
+    requirements.txt
+    .env.example
+    pytest.ini
+    config/
+      __init__.py
+      settings.py
+      urls.py
+      asgi.py
+      wsgi.py
+    apps/
+      __init__.py
+      core/
+      accounts/
+      tenants/
+      products/
+      orders/
+      delivery/
+      payments/
+      compliance/
+      notifications/
+
+  frontend/
+    package.json
+    index.html
+    src/
+
+  docs/
+    business/
+    technical/
+    legal/
+    mockups/
+
+  README.md
+  .gitignore
+
+Initial backend milestone should only create:
+- backend/config/
+- backend/apps/core/
+- backend/requirements.txt
+- backend/.env.example
+- backend/pytest.ini
+
+Do not create all apps at once unless the task explicitly asks for empty folder
+structure only. Prefer adding apps one milestone at a time.
+
+================================================================================
+8. DJANGO BACKEND APPS
+================================================================================
+
+Planned backend apps:
+
+1. core
+Purpose:
+- health endpoint
+- shared helpers
+- base API response utilities if needed
+
+2. accounts
+Purpose:
+- internal users
+- admin/operator/driver roles later
+- use Django User initially if possible
+
+3. tenants
+Purpose:
+- tenant/operation definition
+- future multi-market readiness
+- storefront settings
+- operating schedule
+
+4. products
+Purpose:
+- categories
+- products
+- variants
+- packs
+- active/inactive catalog logic
+
+5. orders
+Purpose:
+- customers
+- addresses
+- orders
+- order items
+- order status history
+- checkout logic
+
+6. delivery
+Purpose:
+- delivery zones
+- delivery fees
+- delivery assignment later
+
+7. payments
+Purpose:
+- manual payment records
+- payment methods
+- payment status
+- later integrations
+
+8. compliance
+Purpose:
+- age confirmation
+- delivery verification
+- compliance events
+- responsible alcohol delivery workflow
+
+9. notifications
+Purpose:
+- notification logs
+- WhatsApp links initially
+- future WhatsApp API integration
+
+================================================================================
+9. INITIAL MODELS / DATA MODEL DRAFT
+================================================================================
+
+Tenant:
+- id
+- name
+- slug
+- country
+- city
+- currency
+- is_active
+- created_at
+- updated_at
+
+StorefrontSettings:
+- id
+- tenant
+- display_name
+- tagline
+- primary_color optional
+- whatsapp_number optional
+- is_accepting_orders
+- created_at
+- updated_at
+
+OperatingSchedule:
+- id
+- tenant
+- weekday
+- opens_at
+- closes_at
+- is_active
+
+Category:
+- id
+- tenant
+- name
+- slug
+- description
+- display_order
+- is_active
+- created_at
+- updated_at
+
+Product:
+- id
+- tenant
+- category
+- name
+- slug
+- description
+- base_price
+- image optional
+- alcohol_percentage_note optional
+- servings
+- is_alcoholic
+- is_active
+- display_order
+- created_at
+- updated_at
+
+ProductVariant:
+- id
+- product
+- name
+- servings
+- price
+- is_active
+- created_at
+- updated_at
+
+Customer:
+- id
+- full_name
+- phone
+- email optional
+- created_at
+- updated_at
+
+Address:
+- id
+- customer
+- address_line
+- building_details optional
+- city
+- delivery_notes optional
+- created_at
+- updated_at
+
+Order:
+- id
+- tenant
+- customer
+- address
+- order_code
+- status
+- scheduled_date
+- scheduled_time_window
+- subtotal
+- delivery_fee
+- total
+- payment_method
+- payment_status
+- customer_notes
+- age_confirmed_by_customer
+- terms_accepted
+- created_at
+- updated_at
+
+OrderItem:
+- id
+- order
+- product
+- variant optional
+- quantity
+- unit_price
+- total_price
+- created_at
+- updated_at
+
+OrderStatusHistory:
+- id
+- order
+- previous_status
+- new_status
+- changed_by optional
+- notes optional
+- created_at
+
+DeliveryZone:
+- id
+- tenant
+- name
+- city
+- base_fee
+- minimum_order_amount
+- is_active
+- created_at
+- updated_at
+
+PaymentMethod:
+- id
+- tenant
+- name
+- code
+- is_active
+
+PaymentRecord:
+- id
+- order
+- method
+- amount
+- status
+- reference optional
+- notes optional
+- created_at
+- updated_at
+
+DeliveryVerification:
+- id
+- order
+- receiver_name
+- receiver_document_checked
+- receiver_is_adult
+- verified_by optional
+- verification_notes optional
+- delivered_at
+- created_at
+
+ComplianceEvent:
+- id
+- order
+- event_type
+- description
+- created_at
+
+NotificationLog:
+- id
+- order
+- channel
+- recipient
+- message_type
+- status
+- created_at
+
+================================================================================
+10. ORDER STATUSES
+================================================================================
+
+Initial statuses:
+
+PENDING
+ACCEPTED
+IN_PREPARATION
+READY_FOR_DELIVERY
+OUT_FOR_DELIVERY
+DELIVERED
+CANCELLED
+REJECTED
+FAILED_AGE_VERIFICATION
+
+Rules:
+- New public checkout orders start as PENDING.
+- Admin can ACCEPT or REJECT.
+- Admin can move ACCEPTED to IN_PREPARATION.
+- Admin can move IN_PREPARATION to READY_FOR_DELIVERY.
+- Admin can move READY_FOR_DELIVERY to OUT_FOR_DELIVERY.
+- Alcoholic orders should not be marked DELIVERED without delivery verification.
+- If age verification fails, status must become FAILED_AGE_VERIFICATION.
+- CANCELLED must be available for operational cancellations.
+- Status changes must create OrderStatusHistory records.
+
+================================================================================
+11. API ENDPOINT PLAN
+================================================================================
+
+Public storefront endpoints:
+
+GET /api/health/
+
+GET /api/public/{tenant_slug}/catalog/
+Purpose:
+- Return active categories, active products and active variants for tenant.
+
+GET /api/public/{tenant_slug}/products/{product_slug}/
+Purpose:
+- Return public product detail.
+
+GET /api/public/{tenant_slug}/delivery-zones/
+Purpose:
+- Return active delivery zones.
+
+POST /api/public/{tenant_slug}/orders/
+Purpose:
+- Create customer, address, order and order items.
+- Validate age confirmation for alcoholic orders.
+- Validate product availability.
+- Validate zone if delivery zone is included.
+- Calculate subtotal, delivery fee and total.
+
+GET /api/public/{tenant_slug}/orders/{order_code}/status/
+Purpose:
+- Return public status of a specific order.
+
+Admin/internal endpoints:
+
+GET /api/admin/orders/
+GET /api/admin/orders/{id}/
+PATCH /api/admin/orders/{id}/status/
+PATCH /api/admin/orders/{id}/payment/
+POST /api/admin/orders/{id}/delivery-verification/
+GET /api/admin/products/
+POST /api/admin/products/
+PATCH /api/admin/products/{id}/
+GET /api/admin/dashboard/summary/
+
+Authentication:
+- Do not implement authentication in BE-001.
+- Later use Django auth/session or token auth for internal admin endpoints.
+- Public endpoints must not require customer login in MVP.
+
+================================================================================
+12. FRONTEND PLAN — FOR CONTEXT ONLY
+================================================================================
+
+Do not build frontend until backend catalog + checkout exists.
+
+Customer screens:
+1. Home / landing
+2. Catalog
+3. Product detail
+4. Cart
+5. Checkout
+6. Order confirmation
+7. Order status
+
+Admin screens:
+1. Login
+2. Dashboard
+3. Orders list
+4. Order detail
+5. Change order status
+6. Mark payment
+7. Delivery verification
+
+Frontend identity:
+- premium
+- mobile-first
+- elegant
+- simple
+- night/cocktail/lounge vibe
+- trust-first
+- event-oriented
+- not a cheap liquor app
+
+================================================================================
+13. DEVELOPMENT ROADMAP
+================================================================================
+
+Backend milestones:
+
+BE-001 — Backend skeleton + health endpoint
+Goal:
+- Create Django project
+- Configure DRF
+- Configure pytest
+- Add GET /api/health/
+- Add passing test
+
+BE-002 — Tenants app
+Goal:
+- Add Tenant model
+- Add StorefrontSettings draft model
+- Add admin registration
+- Add tests
+- Add seed or fixture later
+
+BE-003 — Products/catalog app
+Goal:
+- Add Category, Product, ProductVariant
+- Add public catalog endpoint
+- Add tests for active filtering, tenant isolation and ordering
+
+BE-004 — Delivery zones
+Goal:
+- Add DeliveryZone model
+- Add public active zones endpoint
+- Add fee/minimum order logic if needed
+
+BE-005 — Customers + addresses
+Goal:
+- Add Customer and Address models
+- Add validation utilities
+
+BE-006 — Orders + order items
+Goal:
+- Add Order, OrderItem, OrderStatusHistory
+- Add model-level calculations and tests
+
+BE-007 — Checkout endpoint
+Goal:
+- POST public order endpoint
+- Create customer/address/order/items
+- Validate products
+- Validate alcohol age confirmation
+- Calculate totals
+
+BE-008 — Order status transitions
+Goal:
+- Add status transition logic
+- Add status history
+- Add admin status endpoint
+
+BE-009 — Payment records/manual payments
+Goal:
+- Payment methods
+- Payment records
+- Mark order as pending/paid/manual
+
+BE-010 — Compliance verification
+Goal:
+- DeliveryVerification model
+- Compliance events
+- Failed age verification workflow
+- Delivered workflow with verification
+
+BE-011 — Admin order endpoints
+Goal:
+- Order list/detail
+- Admin operational actions
+
+BE-012 — Dashboard summary
+Goal:
+- Basic metrics:
+  - pending orders
+  - accepted orders
+  - daily total
+  - order counts by status
+
+BE-013 — Seed data
+Goal:
+- Seed Drinklivery Panama tenant
+- Seed 6-8 initial products
+
+BE-014 — Deploy preparation
+Goal:
+- .env.example
+- production notes
+- CORS tightening
+- static files decision
+- database config notes
+
+Full project phases:
+
+Phase 0: Repo + AI context
+Phase 1: Django base + health endpoint
+Phase 2: Tenant + catalog
+Phase 3: Checkout + orders
+Phase 4: Order status + admin flow
+Phase 5: Delivery zones + compliance
+Phase 6: Storefront React
+Phase 7: Admin panel
+Phase 8: Demo deploy
+
+================================================================================
+14. INITIAL PRODUCT CATALOG DRAFT
+================================================================================
+
+Initial catalog should be small: 6 to 8 products.
+
+Possible MVP products:
+1. Mojito Pack x4
+2. Margarita Pack x4
+3. Gin Tonic Premium Pack x4
+4. Piña Colada Pack x4
+5. Sangría Pack x6
+6. Date Night Pack
+7. Birthday Pack
+8. Mocktail Pack
+
+Categories:
+- Classic Packs
+- Premium Packs
+- Party Packs
+- Mocktails
+- Special Occasions
+
+No standalone bottle sales.
+
+================================================================================
+15. VALIDATION METRICS
+================================================================================
+
+After 30-50 real orders, the business should evaluate:
+
+- average ticket: target $35+
+- gross margin: target 50%+
+- repeat purchase: target 20-30%
+- most sold products
+- best delivery zones
+- strongest days
+- preparation time
+- delivery issues
+- failed verification cases
+- cancellation reasons
+- customer feedback
+- WhatsApp/order conversion
+
+The MVP exists to validate demand, not to overbuild technology.
+
+================================================================================
+16. AI WORKER PROTOCOL
+================================================================================
+
+All AI workers must follow:
+
+1. One task = one intention.
+2. Do not modify files outside allowed scope.
+3. Do not run broad refactors unless explicitly requested.
+4. Do not introduce new dependencies without approval.
+5. Always add or update tests for backend behavior.
+6. Always run the relevant test suite before reporting completion.
+7. Do not commit unless tests pass.
+8. Do not push to remote.
+9. Do not use "git add .".
+10. Write a Markdown report after each completed task.
+11. If something is unclear, stop and report ambiguity instead of guessing.
+12. Preserve business rules and compliance rules.
+13. Do not create frontend code during backend milestones unless explicitly requested.
+14. Do not add payments, WhatsApp API, Docker, Celery or auth prematurely.
+15. Keep changes small and reviewable.
+
+Report format after each task:
+- Task ID
+- Summary
+- Files changed
+- Tests run
+- Test result
+- Issues/risks
+- Next recommended task
+
+================================================================================
+17. BACKEND BE-001 TASK SPECIFICATION
+================================================================================
+
+Task ID:
+BE-001
+
+Task name:
+Initialize Django backend skeleton with health endpoint
+
+Goal:
+Create the initial Django backend skeleton with DRF and pytest, and expose a
+simple health endpoint.
+
+Allowed scope:
+- backend/
+- backend/config/
+- backend/apps/core/
+- backend/requirements.txt
+- backend/.env.example
+- backend/pytest.ini
+- ai_context/02-LOG.md
+- ai_context/10-CODEX-TASKS.md
+- ai_context/11-QWEN-REPORTS/ if needed
+
+Required backend structure:
+
+backend/
+  manage.py
+  requirements.txt
+  .env.example
+  pytest.ini
+  config/
+    __init__.py
+    settings.py
+    urls.py
+    asgi.py
+    wsgi.py
+  apps/
+    __init__.py
+    core/
+      __init__.py
+      apps.py
+      urls.py
+      views.py
+      tests/
+        __init__.py
+        test_health.py
+
+Required dependencies:
+- Django
+- djangorestframework
+- django-cors-headers
+- pytest
+- pytest-django
+- python-dotenv
+
+Required endpoint:
+GET /api/health/
+
+Expected response:
+{
+  "status": "ok",
+  "service": "drinklivery-backend"
+}
+
+Expected status:
+200 OK
+
+Required test:
+Verify:
+- GET /api/health/ returns 200
+- response status is "ok"
+- response service is "drinklivery-backend"
+
+Rules:
+- Do not create product/order/customer/payment/compliance models yet.
+- Do not create frontend code.
+- Do not add Docker.
+- Do not add Celery.
+- Do not add authentication yet.
+- Do not add payment integrations.
+- Do not over-engineer settings.
+- Keep a single config/settings.py for now.
+- Do not push to remote.
+- Do not commit unless explicitly approved.
+- Run pytest before reporting completion.
+
+Definition of Done:
+1. Django project exists inside backend/.
+2. DRF is installed and configured.
+3. /api/health/ returns 200.
+4. pytest is configured.
+5. Health endpoint test passes.
+6. No business models were added yet.
+7. No frontend code was added.
+8. ai_context/02-LOG.md was updated.
+9. A worker report was created if requested.
+10. No push was made.
+
+================================================================================
+18. EXACT PROMPT FOR CODEX — BE-001
+================================================================================
+
+You are working on Drinklivery, a premium cocktail delivery MVP.
+
+Current goal:
+Initialize the backend foundation only.
+
+Business context:
+Drinklivery is a premium cocktail delivery platform for ready-to-serve cocktail
+packs, cocktail kits, mocktail packs and event-oriented bundles. The initial pilot
+market is Panama. The software is owned by Lazy Software / Adrian. The backend
+must be clean, modular and testable.
+
+Task:
+Create the initial Django backend skeleton with Django REST Framework and a
+health endpoint.
+
+Allowed scope:
+- backend/
+- backend/config/
+- backend/apps/core/
+- backend/requirements.txt
+- backend/.env.example
+- backend/pytest.ini
+- ai_context/02-LOG.md
+- ai_context/10-CODEX-TASKS.md
+- ai_context/11-QWEN-REPORTS/ if needed
+
+Required structure:
+backend/
+  manage.py
+  requirements.txt
+  .env.example
+  pytest.ini
+  config/
+    __init__.py
+    settings.py
+    urls.py
+    asgi.py
+    wsgi.py
+  apps/
+    __init__.py
+    core/
+      __init__.py
+      apps.py
+      urls.py
+      views.py
+      tests/
+        __init__.py
+        test_health.py
+
+Required dependencies:
+- Django
+- djangorestframework
+- django-cors-headers
+- pytest
+- pytest-django
+- python-dotenv
+
+Required endpoint:
+GET /api/health/
+
+Expected response:
+{
+  "status": "ok",
+  "service": "drinklivery-backend"
+}
+
+Required test:
+Create a pytest test that verifies:
+- GET /api/health/ returns 200
+- response status is "ok"
+- response service is "drinklivery-backend"
+
+Rules:
+- Do not create product/order/customer/payment/compliance models yet.
+- Do not create frontend code.
+- Do not add Docker.
+- Do not add Celery.
+- Do not add authentication yet.
+- Do not add payment integrations.
+- Do not over-engineer settings.
+- Keep a single config/settings.py for now.
+- Do not push to remote.
+- Do not commit unless I explicitly approve.
+- Run pytest before reporting completion.
+
+Validation:
+- Show the final backend tree.
+- Show the pytest result.
+- Summarize files created/modified.
+- Update ai_context/02-LOG.md with a short entry.
+
+================================================================================
+19. EXACT PROMPT FOR QWEN — REVIEW BE-001
+================================================================================
+
+You are the local backend reviewer for Drinklivery.
+
+Read first:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/06-COMPLIANCE-RULES.md
+- ai_context/08-MVP-SCOPE.md
+- backend/config/settings.py
+- backend/config/urls.py
+- backend/apps/core/views.py
+- backend/apps/core/urls.py
+- backend/apps/core/tests/test_health.py
+- backend/pytest.ini
+- backend/requirements.txt
+
+Task:
+Review the backend skeleton created in Milestone BE-001.
+
+Allowed action:
+Create one Markdown report only.
+
+Allowed output file:
+ai_context/11-QWEN-REPORTS/001-backend-skeleton-review.md
+
+Do not modify backend code.
+
+The report must include:
+1. Whether the structure matches the requested scope.
+2. Whether the health endpoint is correctly implemented.
+3. Whether pytest is configured correctly.
+4. Whether any forbidden features were added.
+5. Whether the backend is ready for BE-002: tenants app.
+6. Any concrete issue that must be fixed before continuing.
+
+Rules:
+- Do not suggest frontend work.
+- Do not suggest payments.
+- Do not suggest Docker.
+- Do not suggest Celery.
+- Do not invent features outside MVP scope.
+- Be concise and practical.
+
+================================================================================
+20. GIT POLICY
+================================================================================
+
+Do not use:
+git add .
+
+Use explicit add commands.
+
+Recommended first commit after BE-001 passes tests and is approved:
+
+git add backend/config backend/apps/core backend/manage.py backend/requirements.txt backend/pytest.ini backend/.env.example ai_context README.md .gitignore
+git commit -m "Initialize Drinklivery backend skeleton"
+
+Do not push unless explicitly asked.
+
+================================================================================
+21. ENGINEERING PRINCIPLES
+================================================================================
+
+1. Business rules drive the architecture.
+2. Compliance is not an afterthought.
+3. Keep MVP small.
+4. Backend first.
+5. Tests before expansion.
+6. No feature creep.
+7. Build for Panama pilot, but keep future markets possible.
+8. Do not overcomplicate infrastructure.
+9. Avoid storing sensitive information unnecessarily.
+10. The app must help the operator run the business, not just look good.
+11. Every module must be understandable by local AI workers.
+12. Use clear app boundaries.
+13. Prefer boring, reliable code over clever abstractions.
+14. Make every step reviewable.
+15. Preserve ownership separation: software belongs to Lazy Software / Adrian.
+
+================================================================================
+22. CURRENT STATUS
+================================================================================
+
+Planning phase:
+Closed.
+
+Technical phase:
+Ready to begin backend development.
+
+First execution task:
+BE-001 — Initialize Django backend skeleton with health endpoint and tests.
+
+Next task after BE-001:
+BE-002 — Tenants app.
+
+Do not start BE-002 until BE-001 passes tests and is reviewed.
+
+================================================================================
+END OF FILE
+================================================================================
