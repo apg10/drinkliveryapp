@@ -132,7 +132,8 @@ Microtasks:
 
 - `BE-007`: Add orders foundation
 - `BE-008`: Add public checkout endpoint
-- `BE-009`: Add alcohol age confirmation checkout rules
+- `BE-009A`: Require terms acceptance at checkout
+- `BE-009B`: Require age confirmation for alcoholic checkout
 
 Goal:
 
@@ -142,7 +143,7 @@ Goal:
 
 Review boundary:
 
-- Review after `BE-007` through `BE-009` are complete and reports exist.
+- Review after `BE-007` through `BE-009B` are complete and reports exist.
 
 Expected final command:
 
@@ -157,8 +158,9 @@ Execution chats:
 
 - Chat 1: `BE-007`
 - Chat 2: `BE-008`
-- Chat 3: `BE-009`
-- Chat 4: Block 3 summary report only
+- Chat 3: `BE-009A`
+- Chat 4: `BE-009B`
+- Chat 5: Block 3 summary report only
 
 ## Block 4: Status, Public Tracking, Payments, And Compliance
 
@@ -167,9 +169,11 @@ Status: Do not start until Block 3 is reviewed.
 Microtasks:
 
 - `BE-010`: Add order status transition history
-- `BE-011`: Add public order status endpoint
-- `BE-012`: Add manual payment records
-- `BE-013`: Add compliance delivery verification
+- `BE-011A`: Add public order status endpoint
+- `BE-012A`: Add payments app and PaymentRecord model
+- `BE-012B`: Add manual payment record service
+- `BE-013A`: Add compliance models
+- `BE-013B`: Add delivery verification service
 
 Goal:
 
@@ -180,7 +184,7 @@ Goal:
 
 Review boundary:
 
-- Review after `BE-010` through `BE-013` are complete and reports exist.
+- Review after `BE-010` through `BE-013B` are complete and reports exist.
 
 Expected final command:
 
@@ -194,10 +198,12 @@ Block report:
 Execution chats:
 
 - Chat 1: `BE-010`
-- Chat 2: `BE-011`
-- Chat 3: `BE-012`
-- Chat 4: `BE-013`
-- Chat 5: Block 4 summary report only
+- Chat 2: `BE-011A`
+- Chat 3: `BE-012A`
+- Chat 4: `BE-012B`
+- Chat 5: `BE-013A`
+- Chat 6: `BE-013B`
+- Chat 7: Block 4 summary report only
 
 ## Block 5: Admin Operations
 

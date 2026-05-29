@@ -523,13 +523,13 @@ REPORT FILE:
 
 - `ai_context/11-QWEN-REPORTS/008-public-checkout.md`
 
-## BE-009
+## BE-009A
 
-TASK ID: `BE-009`
+TASK ID: `BE-009A`
 
-TITLE: Add alcohol age confirmation checkout rules
+TITLE: Require terms acceptance at checkout
 
-OBJECTIVE: Enforce age confirmation and terms acceptance at checkout.
+OBJECTIVE: Enforce `terms_accepted=true` for all checkout orders.
 
 CONTEXT FILES TO READ:
 
@@ -556,19 +556,69 @@ FORBIDDEN FILES:
 
 IMPLEMENTATION REQUIREMENTS:
 
-- Detect if cart contains any alcoholic product.
-- Require `age_confirmed_by_customer=true` if cart contains alcoholic products.
 - Require `terms_accepted=true` for all checkouts.
-- Store age confirmation flag on order.
 - Store terms acceptance flag on order.
 - Do not store ID images or sensitive document data.
+
+TEST REQUIREMENTS:
+
+- Test terms acceptance is required for all orders.
+- Test checkout succeeds when terms are accepted.
+
+COMMANDS TO RUN:
+
+- `cd backend`
+- `pytest apps/orders/tests`
+
+REPORT FILE:
+
+- `ai_context/11-QWEN-REPORTS/009a-terms-acceptance.md`
+
+## BE-009B
+
+TASK ID: `BE-009B`
+
+TITLE: Require age confirmation for alcoholic checkout
+
+OBJECTIVE: Enforce `age_confirmed_by_customer=true` only when cart contains alcoholic products.
+
+CONTEXT FILES TO READ:
+
+- `ai_context/05-BUSINESS-RULES.md`
+- `ai_context/06-COMPLIANCE-RULES.md`
+- `backend/apps/products/models.py`
+- `backend/apps/orders/serializers.py`
+- `backend/apps/orders/services.py`
+- `backend/apps/orders/views.py`
+
+ALLOWED FILES TO MODIFY:
+
+- `backend/apps/orders/serializers.py`
+- `backend/apps/orders/services.py`
+- `backend/apps/orders/tests/`
+- `ai_context/02-LOG.md`
+- `ai_context/11-QWEN-REPORTS/009-age-confirmation-rules.md`
+
+FORBIDDEN FILES:
+
+- `frontend/`
+- `backend/apps/payments/`
+- ID image storage
+- Document upload code
+
+IMPLEMENTATION REQUIREMENTS:
+
+- Detect if checkout cart contains any alcoholic product.
+- Require `age_confirmed_by_customer=true` if cart contains alcoholic products.
+- Do not require age confirmation for mocktail-only orders.
+- Store age confirmation flag on order.
+- Do not store ID images, document images, document numbers, or sensitive ID data.
 
 TEST REQUIREMENTS:
 
 - Test alcoholic order without age confirmation is rejected.
 - Test alcoholic order with age confirmation succeeds.
 - Test mocktail-only order does not require age confirmation.
-- Test terms acceptance is required for all orders.
 
 COMMANDS TO RUN:
 
@@ -632,11 +682,15 @@ REPORT FILE:
 
 ## BE-011 Through BE-017 Summary
 
-BE-011: Public order status endpoint.
+BE-011A: Public order status endpoint.
 
-BE-012: Manual payment records.
+BE-012A: Payments app and PaymentRecord model.
 
-BE-013: Compliance delivery verification.
+BE-012B: Manual payment record service.
+
+BE-013A: Compliance models.
+
+BE-013B: Delivery verification service.
 
 BE-014: Admin order endpoints.
 

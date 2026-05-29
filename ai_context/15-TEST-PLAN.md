@@ -106,14 +106,20 @@ Required checkout tests:
 - Variant from another product is rejected.
 - Delivery zone from another tenant is rejected.
 
-## BE-009 Tests
+## BE-009A Tests
+
+Required checkout tests:
+
+- Terms acceptance is required for all orders.
+- Checkout succeeds when terms are accepted.
+
+## BE-009B Tests
 
 Required compliance checkout tests:
 
 - Alcoholic order without age confirmation is rejected.
 - Alcoholic order with age confirmation succeeds.
 - Mocktail-only order does not require age confirmation.
-- Terms acceptance is required for all orders.
 - No sensitive ID document field is accepted or stored.
 
 ## BE-010 Tests
@@ -128,19 +134,28 @@ Required status tests:
 
 ## Later Required Tests
 
-BE-011:
+BE-011A:
 
 - Public order status returns safe fields only.
 - Unknown order returns 404.
 - Order from another tenant is inaccessible.
 
-BE-012:
+BE-012A:
 
 - Manual payment record can be created.
+
+BE-012B:
+
 - Payment status can be updated.
 - Payment references are not exposed publicly.
 
-BE-013:
+BE-013A:
+
+- DeliveryVerification model can be created.
+- ComplianceEvent model can be created.
+- No document images are stored.
+
+BE-013B:
 
 - Delivery verification can mark order delivered when adult verification passes.
 - Failed verification marks order `FAILED_AGE_VERIFICATION`.

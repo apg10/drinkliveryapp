@@ -18,3 +18,10 @@
 - BE-006 executed: delivery app created with DeliveryZone model, admin registration, GET /api/public/{tenant_slug}/delivery-zones/ endpoint, serialization, and delivery model/API tests.
 - Block 2 cleanup applied: added missing BE-003 and block reports, changed product/category slug uniqueness to per-tenant constraints, removed dead ProductVariant validation, and removed duplicate delivery model tests from API test file.
 - Prepared local AI prompts for Block 3: BE-007 through BE-009 plus Block 3 summary.
+- BE-007 completed in Codex/OpenCode after Qwen stalled on tests: orders app foundation created with Customer, Address, Order, OrderItem, OrderStatusHistory, admin registration, migration, and 13 model tests.
+- BE-008 completed in Codex/OpenCode after Qwen stalled: public checkout endpoint added with nested request validation, cart validation, total calculation, and checkout API tests.
+- Split BE-009 into BE-009A terms acceptance and BE-009B alcoholic age confirmation to reduce local AI context size.
+- BE-009A executed: terms_accepted made required in CheckoutSerializer (required=True + validate guard), included in checkout response, and default payload updated. Added 2 test cases: rejection when false and success when true. All 88 tests passing (0 failed).
+- BE-009B executed: age_confirmed_by_customer enforcement added to CheckoutSerializer validate() for alcoholic product carts. Products with is_alcoholic=True now require age_confirmed_by_customer=true, mocktail-only orders bypass this check, and mixed carts also require it. Added 5 new test cases covering alcoholic rejection/success, mocktail-only bypass, and mixed cart enforcement. All 30 orders tests passing (17 checkout + 13 models).
+- Block 3 cleanup applied: tenant validation now runs before checkout compliance validation, BE-009A report scope was corrected, and checkout response was kept within BE-008 shape.
+- Split Block 4 into smaller tasks: BE-011A, BE-012A, BE-012B, BE-013A, and BE-013B.
