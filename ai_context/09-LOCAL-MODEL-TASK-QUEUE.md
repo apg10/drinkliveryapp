@@ -20,9 +20,9 @@ Each block requires a block summary report as defined in `ai_context/16-BLOCK-EX
 
 - Block 1: `BE-001`, `BE-002`
 - Block 2: `BE-003`, `BE-004`, `BE-005`, `BE-006`
-- Block 3: `BE-007`, `BE-008`, `BE-009`
-- Block 4: `BE-010`, `BE-011`, `BE-012`, `BE-013`
-- Block 5: `BE-014`, `BE-015`
+- Block 3: `BE-007`, `BE-008`, `BE-009A`, `BE-009B`
+- Block 4: `BE-010`, `BE-011A`, `BE-012A`, `BE-012B`, `BE-013A`, `BE-013B`
+- Block 5: `BE-014A`, `BE-014B`, `BE-014C`, `BE-014D`, `BE-015A`
 - Block 6: `BE-016`, `BE-017`
 
 See `ai_context/16-BLOCK-EXECUTION-PLAN.md` for block goals and review boundaries.
@@ -692,9 +692,15 @@ BE-013A: Compliance models.
 
 BE-013B: Delivery verification service.
 
-BE-014: Admin order endpoints.
+BE-014A: Admin order list and detail endpoints.
 
-BE-015: Dashboard summary.
+BE-014B: Admin order status update endpoint.
+
+BE-014C: Admin payment update endpoint.
+
+BE-014D: Admin delivery verification endpoint.
+
+BE-015A: Dashboard summary endpoint.
 
 BE-016: Seed data for Drinklivery Panama.
 

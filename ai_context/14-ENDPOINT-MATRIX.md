@@ -8,22 +8,22 @@
 | GET | `/api/public/{tenant_slug}/catalog/` | None | `products` | BE-004 | Tenant slug | Active categories, products, variants |
 | GET | `/api/public/{tenant_slug}/products/{product_slug}/` | None | `products` | BE-005 | Tenant slug and product slug | Active product detail with active variants |
 | GET | `/api/public/{tenant_slug}/delivery-zones/` | None | `delivery` | BE-006 | Tenant slug | Active delivery zones |
-| POST | `/api/public/{tenant_slug}/orders/` | None | `orders` | BE-008/BE-009 | Customer, address, schedule, zone, items, payment method, age/terms flags | Created pending order summary |
-| GET | `/api/public/{tenant_slug}/orders/{order_code}/status/` | None | `orders` | BE-011 | Tenant slug and order code | Safe public order status |
+| POST | `/api/public/{tenant_slug}/orders/` | None | `orders` | BE-008/BE-009A/BE-009B | Customer, address, schedule, zone, items, payment method, age/terms flags | Created pending order summary |
+| GET | `/api/public/{tenant_slug}/orders/{order_code}/status/` | None | `orders` | BE-011A | Tenant slug and order code | Safe public order status |
 
 ## Admin Endpoints
 
 | Method | Endpoint | Auth | App | Milestone | Request Summary | Response Summary |
 |---|---|---|---|---|---|---|
-| GET | `/api/admin/orders/` | Required later | `orders` | BE-014 | Filters later | Order list |
-| GET | `/api/admin/orders/{id}/` | Required later | `orders` | BE-014 | Order id | Internal order detail |
-| PATCH | `/api/admin/orders/{id}/status/` | Required later | `orders` | BE-014 | New status, note | Updated order status |
-| PATCH | `/api/admin/orders/{id}/payment/` | Required later | `payments` | BE-014 | Payment status/reference | Updated payment/order payment status |
-| POST | `/api/admin/orders/{id}/delivery-verification/` | Required later | `compliance` | BE-014 | Receiver verification data | Delivery verification result |
-| GET | `/api/admin/products/` | Required later | `products` | BE-014 | Filters later | Product list |
-| POST | `/api/admin/products/` | Required later | `products` | BE-014 | Product fields | Created product |
-| PATCH | `/api/admin/products/{id}/` | Required later | `products` | BE-014 | Product changes | Updated product |
-| GET | `/api/admin/dashboard/summary/` | Required later | `orders` | BE-015 | Optional date filters | Summary metrics |
+| GET | `/api/admin/orders/` | Admin | `orders` | BE-014A | Filters later | Order list |
+| GET | `/api/admin/orders/{id}/` | Admin | `orders` | BE-014A | Order id | Internal order detail |
+| PATCH | `/api/admin/orders/{id}/status/` | Admin | `orders` | BE-014B | New status, note | Updated order status |
+| PATCH | `/api/admin/orders/{id}/payment/` | Admin | `payments` | BE-014C | Method, status, amount, reference, notes | Updated payment/order payment status |
+| POST | `/api/admin/orders/{id}/delivery-verification/` | Admin | `compliance` | BE-014D | Receiver verification data | Delivery verification result |
+| GET | `/api/admin/products/` | Admin | `products` | Future | Filters later | Product list |
+| POST | `/api/admin/products/` | Admin | `products` | Future | Product fields | Created product |
+| PATCH | `/api/admin/products/{id}/` | Admin | `products` | Future | Product changes | Updated product |
+| GET | `/api/admin/dashboard/summary/` | Admin | `orders` | BE-015A | Optional date filters | Summary metrics |
 
 ## Checkout Request Draft
 

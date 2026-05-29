@@ -420,7 +420,7 @@ You are Qwen/local AI working on Drinklivery.
 
 Important execution rule:
 This chat/session is for exactly one microtask: BE-008.
-Do not start BE-009 or any other task in this chat.
+Do not start BE-009A or any other task in this chat.
 
 Read these files from disk before editing:
 - ai_context/00-PLAN.md
@@ -443,7 +443,7 @@ Execute BE-008 exactly as specified in ai_context/09-LOCAL-MODEL-TASK-QUEUE.md.
 
 Scope:
 Only modify files allowed under BE-008.
-Do not implement age confirmation or terms enforcement beyond storing fields already present; BE-009 covers those rules.
+Do not implement age confirmation or terms enforcement beyond storing fields already present; BE-009A and BE-009B cover those rules.
 Do not create payment app, compliance app, notification app, admin API, or frontend code.
 Do not implement payment gateways or WhatsApp API.
 Do not commit.
@@ -907,7 +907,7 @@ You are Qwen/local AI working on Drinklivery.
 
 Important execution rule:
 This chat/session is for exactly one microtask: BE-013B.
-Do not start BE-014 or any other task in this chat.
+Do not start BE-014A or any other task in this chat.
 
 Read these files from disk before editing:
 - ai_context/00-PLAN.md
@@ -996,4 +996,360 @@ The report must include:
 
 Allowed file to modify:
 - ai_context/11-QWEN-REPORTS/BLOCK-4-status-payments-compliance.md
+```
+
+## Prompt For BE-014A
+
+Use only after Block 4 has been reviewed and approved.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: BE-014A.
+Do not start BE-014B or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/13-ARCHITECTURE.md
+- ai_context/14-ENDPOINT-MATRIX.md
+- ai_context/15-TEST-PLAN.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+- backend/config/urls.py
+- backend/apps/orders/models.py
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+
+Task:
+Add admin order list and detail endpoints only.
+
+Scope:
+Only modify:
+- backend/config/urls.py if needed
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/orders/tests/
+- ai_context/02-LOG.md
+- ai_context/11-QWEN-REPORTS/014a-admin-order-read-endpoints.md
+
+Implementation requirements:
+- Add `GET /api/admin/orders/`.
+- Add `GET /api/admin/orders/{id}/`.
+- Protect both endpoints with DRF `IsAdminUser`.
+- Return internal order data useful for operations: id, order_code, status, payment_status, payment_method, customer summary, address summary, totals, scheduled fields, item summaries, created_at.
+- Do not add status update, payment update, delivery verification, dashboard, product admin, frontend, or external integrations.
+
+Test requirements:
+- Unauthenticated/non-admin access is rejected.
+- Admin user can list orders.
+- Admin user can retrieve order detail.
+- Detail includes items.
+- Unknown order returns 404.
+
+Commands to run:
+- cd backend
+- python -m pytest apps/orders -q
+
+Required report:
+- ai_context/11-QWEN-REPORTS/014a-admin-order-read-endpoints.md
+
+Do not commit. Do not push. Do not use git add .
+```
+
+## Prompt For BE-014B
+
+Use only after BE-014A completes successfully.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: BE-014B.
+Do not start BE-014C or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/13-ARCHITECTURE.md
+- ai_context/14-ENDPOINT-MATRIX.md
+- ai_context/15-TEST-PLAN.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+- backend/apps/orders/models.py
+- backend/apps/orders/services.py
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+
+Task:
+Add admin order status update endpoint only.
+
+Scope:
+Only modify:
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/orders/tests/
+- ai_context/02-LOG.md
+- ai_context/11-QWEN-REPORTS/014b-admin-order-status-update.md
+
+Implementation requirements:
+- Add `PATCH /api/admin/orders/{id}/status/`.
+- Protect endpoint with DRF `IsAdminUser`.
+- Accept `status` and optional `note`.
+- Validate status is one of `Order.Status` values.
+- Use `transition_order_status()`.
+- Store `changed_by` using the authenticated user's username or email.
+- Do not add payment update, delivery verification, dashboard, product admin, frontend, or external integrations.
+
+Test requirements:
+- Unauthenticated/non-admin access is rejected.
+- Admin can update status.
+- Status update creates OrderStatusHistory.
+- Invalid status returns 400.
+- Unknown order returns 404.
+
+Commands to run:
+- cd backend
+- python -m pytest apps/orders -q
+
+Required report:
+- ai_context/11-QWEN-REPORTS/014b-admin-order-status-update.md
+
+Do not commit. Do not push. Do not use git add .
+```
+
+## Prompt For BE-014C
+
+Use only after BE-014B completes successfully.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: BE-014C.
+Do not start BE-014D or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/13-ARCHITECTURE.md
+- ai_context/14-ENDPOINT-MATRIX.md
+- ai_context/15-TEST-PLAN.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+- backend/apps/orders/models.py
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/payments/models.py
+- backend/apps/payments/services.py
+
+Task:
+Add admin payment update endpoint only.
+
+Scope:
+Only modify:
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/orders/tests/
+- ai_context/02-LOG.md
+- ai_context/11-QWEN-REPORTS/014c-admin-payment-update.md
+
+Implementation requirements:
+- Add `PATCH /api/admin/orders/{id}/payment/`.
+- Protect endpoint with DRF `IsAdminUser`.
+- Accept `method`, `status`, `amount`, optional `reference`, optional `notes`.
+- Use `record_manual_payment()`.
+- Return updated order payment status and created payment record id.
+- Do not expose this through public endpoints.
+- Do not add delivery verification, dashboard, product admin, frontend, or external payment gateway integrations.
+
+Test requirements:
+- Unauthenticated/non-admin access is rejected.
+- Admin can create payment record via endpoint.
+- Endpoint updates order.payment_status.
+- Reference and notes are stored.
+- Invalid payment status/method returns 400.
+- Unknown order returns 404.
+
+Commands to run:
+- cd backend
+- python -m pytest apps/orders apps/payments -q
+
+Required report:
+- ai_context/11-QWEN-REPORTS/014c-admin-payment-update.md
+
+Do not commit. Do not push. Do not use git add .
+```
+
+## Prompt For BE-014D
+
+Use only after BE-014C completes successfully.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: BE-014D.
+Do not start BE-015A or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/06-COMPLIANCE-RULES.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/13-ARCHITECTURE.md
+- ai_context/14-ENDPOINT-MATRIX.md
+- ai_context/15-TEST-PLAN.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+- backend/apps/orders/models.py
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/compliance/models.py
+- backend/apps/compliance/services.py
+
+Task:
+Add admin delivery verification endpoint only.
+
+Scope:
+Only modify:
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/orders/tests/
+- ai_context/02-LOG.md
+- ai_context/11-QWEN-REPORTS/014d-admin-delivery-verification.md
+
+Implementation requirements:
+- Add `POST /api/admin/orders/{id}/delivery-verification/`.
+- Protect endpoint with DRF `IsAdminUser`.
+- Accept `receiver_name`, `receiver_document_checked`, `receiver_is_adult`, optional `verification_notes`.
+- Use `record_delivery_verification()`.
+- Use authenticated user's username or email as `verified_by`.
+- Return order status and delivery verification id.
+- Do not store ID images, document images, document numbers, or sensitive ID data.
+- Do not add dashboard, product admin, frontend, or external integrations.
+
+Test requirements:
+- Unauthenticated/non-admin access is rejected.
+- Admin can submit successful delivery verification and order becomes DELIVERED.
+- Failed adult/document verification marks order FAILED_AGE_VERIFICATION.
+- ComplianceEvent is created for failed verification.
+- No sensitive document data is accepted or stored.
+- Unknown order returns 404.
+
+Commands to run:
+- cd backend
+- python -m pytest apps/orders apps/compliance -q
+
+Required report:
+- ai_context/11-QWEN-REPORTS/014d-admin-delivery-verification.md
+
+Do not commit. Do not push. Do not use git add .
+```
+
+## Prompt For BE-015A
+
+Use only after BE-014D completes successfully.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: BE-015A.
+Do not start BE-016 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/00-PLAN.md
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/05-BUSINESS-RULES.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/13-ARCHITECTURE.md
+- ai_context/14-ENDPOINT-MATRIX.md
+- ai_context/15-TEST-PLAN.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+- backend/apps/orders/models.py
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+
+Task:
+Add basic admin dashboard summary endpoint only.
+
+Scope:
+Only modify:
+- backend/apps/orders/urls.py
+- backend/apps/orders/views.py
+- backend/apps/orders/tests/
+- ai_context/02-LOG.md
+- ai_context/11-QWEN-REPORTS/015a-admin-dashboard-summary.md
+
+Implementation requirements:
+- Add `GET /api/admin/dashboard/summary/`.
+- Protect endpoint with DRF `IsAdminUser`.
+- Return total orders.
+- Return pending orders.
+- Return counts by status.
+- Return revenue from orders with payment_status CONFIRMED, using order.total.
+- Keep filters out of scope unless already trivial.
+- Do not add frontend, charts, analytics packages, product admin, or external integrations.
+
+Test requirements:
+- Unauthenticated/non-admin access is rejected.
+- Admin can retrieve dashboard summary.
+- Total orders count is correct.
+- Pending orders count is correct.
+- Counts by status are correct.
+- Confirmed revenue is correct.
+
+Commands to run:
+- cd backend
+- python -m pytest apps/orders -q
+
+Required report:
+- ai_context/11-QWEN-REPORTS/015a-admin-dashboard-summary.md
+
+Do not commit. Do not push. Do not use git add .
+```
+
+## Prompt For Block 5 Summary
+
+Use only after BE-014A, BE-014B, BE-014C, BE-014D, and BE-015A complete successfully.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is only for the Block 5 summary report.
+Do not modify backend code.
+Do not implement any new task.
+
+Read these files from disk:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/09-LOCAL-MODEL-TASK-QUEUE.md
+- ai_context/10-CODEX-TASKS.md
+- ai_context/11-QWEN-REPORTS/014a-admin-order-read-endpoints.md
+- ai_context/11-QWEN-REPORTS/014b-admin-order-status-update.md
+- ai_context/11-QWEN-REPORTS/014c-admin-payment-update.md
+- ai_context/11-QWEN-REPORTS/014d-admin-delivery-verification.md
+- ai_context/11-QWEN-REPORTS/015a-admin-dashboard-summary.md
+- ai_context/16-BLOCK-EXECUTION-PLAN.md
+
+Task:
+Create ai_context/11-QWEN-REPORTS/BLOCK-5-admin-operations.md.
+
+The report must include:
+1. Block ID and title
+2. Microtasks completed
+3. Files changed by task
+4. Tests run by task
+5. Overall test result
+6. Deviations from allowed scope, if any
+7. Risks or unresolved questions
+8. Whether the block is ready for Codex/OpenCode review
+
+Allowed file to modify:
+- ai_context/11-QWEN-REPORTS/BLOCK-5-admin-operations.md
 ```

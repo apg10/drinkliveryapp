@@ -164,7 +164,7 @@ Execution chats:
 
 ## Block 4: Status, Public Tracking, Payments, And Compliance
 
-Status: Do not start until Block 3 is reviewed.
+Status: Complete.
 
 Microtasks:
 
@@ -207,12 +207,15 @@ Execution chats:
 
 ## Block 5: Admin Operations
 
-Status: Do not start until Block 4 is reviewed.
+Status: Ready for local AI.
 
 Microtasks:
 
-- `BE-014`: Add admin order endpoints
-- `BE-015`: Add dashboard summary
+- `BE-014A`: Admin order list and detail endpoints
+- `BE-014B`: Admin order status update endpoint
+- `BE-014C`: Admin payment update endpoint
+- `BE-014D`: Admin delivery verification endpoint
+- `BE-015A`: Admin dashboard summary endpoint
 
 Goal:
 
@@ -221,7 +224,7 @@ Goal:
 
 Review boundary:
 
-- Review after `BE-014` and `BE-015` are complete and reports exist.
+- Review after `BE-014A` through `BE-015A` are complete and reports exist.
 
 Expected final command:
 
@@ -234,9 +237,12 @@ Block report:
 
 Execution chats:
 
-- Chat 1: `BE-014`
-- Chat 2: `BE-015`
-- Chat 3: Block 5 summary report only
+- Chat 1: `BE-014A`
+- Chat 2: `BE-014B`
+- Chat 3: `BE-014C`
+- Chat 4: `BE-014D`
+- Chat 5: `BE-015A`
+- Chat 6: Block 5 summary report only
 
 ## Block 6: Seed Data And Deployment Preparation
 

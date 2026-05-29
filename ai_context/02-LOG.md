@@ -32,3 +32,4 @@
 - Block 4 cleanup applied: compliance records now require an Order relation, orphan compliance records were removed from tests/docs, and Block 4 summary was created.
 - BE-013A executed: compliance app created with DeliveryVerification and ComplianceEvent models, Django admin registration, migrations, and 12 model tests. No API endpoints, no verification service logic, and no image/document fields per security principles. 12/12 tests passing.
 - BE-013B executed: `record_delivery_verification` service added to `apps/compliance/services.py` - creates DeliveryVerification, transitions order to DELIVERED when adult+document verified, creates ComplianceEvent and marks FAILED_AGE_VERIFICATION when verification fails, no sensitive ID/data storage, 8 new tests. All 59 tests passing.
+- Split Block 5 into smaller admin tasks: BE-014A, BE-014B, BE-014C, BE-014D, and BE-015A.

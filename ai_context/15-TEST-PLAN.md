@@ -162,15 +162,24 @@ BE-013B:
 - Verification stores receiver name, document checked flag, adult result, timestamp, and verifier.
 - No document images are stored.
 
-BE-014:
+BE-014A:
 
 - Admin order list works.
 - Admin order detail works.
+
+BE-014B:
+
 - Admin status update works.
+
+BE-014C:
+
 - Admin payment update works.
+
+BE-014D:
+
 - Admin delivery verification works.
 
-BE-015:
+BE-015A:
 
 - Dashboard returns total orders.
 - Dashboard returns pending orders.
