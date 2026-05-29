@@ -2,7 +2,7 @@ from decimal import Decimal as D
 
 from django.db import transaction
 
-from apps.orders.models import Address, Customer, Order, OrderItem
+from apps.orders.models import Address, Customer, Order, OrderItem, OrderStatusHistory
 
 
 def _create_customer(customer_data):
@@ -64,5 +64,25 @@ def checkout_create_order(order_data):
         order.subtotal = subtotal
         order.total = subtotal + zone.base_fee
         order.save(update_fields=['subtotal', 'total'])
+
+    return order
+
+
+def transition_order_status(order, new_status, changed_by='', note=''):
+    if order.status == new_status:
+        return order
+
+    previous_status = order.status
+
+    OrderStatusHistory.objects.create(
+        order=order,
+        previous_status=previous_status,
+        new_status=new_status,
+        changed_by=changed_by,
+        note=note,
+    )
+
+    order.status = new_status
+    order.save(update_fields=['status'])
 
     return order

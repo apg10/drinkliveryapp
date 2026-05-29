@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from apps.delivery.models import DeliveryZone
 from apps.orders.models import Address, Customer, Order, OrderItem, OrderStatusHistory
+from apps.orders.services import transition_order_status
 from apps.products.models import Category, Product, ProductVariant
 from apps.tenants.models import Tenant
 
@@ -192,3 +193,45 @@ class OrderStatusHistoryModelTest(OrderModelTestCase):
         )
 
         self.assertEqual(str(history), f'{order.order_code}: PENDING -> ACCEPTED')
+
+
+class OrderStatusTransitionTest(OrderModelTestCase):
+    def test_transition_changes_order_status(self):
+        order = self.create_order()
+        self.assertEqual(order.status, Order.Status.PENDING)
+
+        transition_order_status(order, Order.Status.ACCEPTED)
+        order.refresh_from_db()
+
+        self.assertEqual(order.status, Order.Status.ACCEPTED)
+
+    def test_transition_creates_history(self):
+        order = self.create_order()
+        self.assertEqual(order.status, Order.Status.PENDING)
+
+        transition_order_status(order, Order.Status.ACCEPTED, changed_by='operator@test.com', note='Accepted')
+        order.refresh_from_db()
+
+        self.assertEqual(order.status_history.count(), 1)
+        history = order.status_history.first()
+        self.assertEqual(history.previous_status, Order.Status.PENDING)
+        self.assertEqual(history.new_status, Order.Status.ACCEPTED)
+
+    def test_transition_no_history_when_status_same(self):
+        order = self.create_order()
+        self.assertEqual(order.status, Order.Status.PENDING)
+
+        transition_order_status(order, Order.Status.PENDING)
+        order.refresh_from_db()
+
+        self.assertEqual(order.status_history.count(), 0)
+
+    def test_transition_stores_note_and_changed_by(self):
+        order = self.create_order()
+
+        transition_order_status(order, Order.Status.IN_PREPARATION, changed_by='admin@test.com', note='Started preparation')
+        order.refresh_from_db()
+
+        history = order.status_history.first()
+        self.assertEqual(history.changed_by, 'admin@test.com')
+        self.assertEqual(history.note, 'Started preparation')
