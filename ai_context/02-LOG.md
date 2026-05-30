@@ -40,3 +40,9 @@
 - BE-014D reviewed: admin delivery verification endpoint added at POST /api/admin/orders/{id}/delivery-verification/ with IsAdminUser protection, required receiver_name, document_number/document_image field rejection, record_delivery_verification() call, username/email verified_by, and compliance API tests.
 - BE-015A reviewed: admin dashboard summary endpoint added at GET /api/admin/dashboard/summary/ with IsAdminUser protection, response containing total_orders, pending_orders, orders_by_status, confirmed_revenue (sum of total where payment_status=CONFIRMED), and dashboard API tests.
 - Block 5 review hardening applied: admin payment rejects invalid/non-finite amounts and delivery verification rejects non-boolean verification flags.
+- BE-016A executed: seed_drinklivery_panama management command created with idempotent tenant/storefront/schedule seeding, 6 tests (3 creation + 3 idempotency), all 22 tests passing.
+
+## 2026-05-30
+
+- BE-017A executed: deployment notes created at ai_context/12-DEPLOYMENT-NOTES.md with environment variables, local run commands, SQLite vs PostgreSQL guidance, collectstatic note, security checklist, and explicit out-of-scope items (Docker, Kubernetes, CI/CD, Celery, Redis). Report created at ai_context/11-QWEN-REPORTS/017a-deployment-notes.md.
+- Block 6 review hardening applied: seed command now refreshes existing schedules, products, variants, and delivery zones; deployment notes now reflect that DATABASE_URL and CORS env parsing are future settings work.
