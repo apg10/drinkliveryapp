@@ -32,4 +32,11 @@
 - Block 4 cleanup applied: compliance records now require an Order relation, orphan compliance records were removed from tests/docs, and Block 4 summary was created.
 - BE-013A executed: compliance app created with DeliveryVerification and ComplianceEvent models, Django admin registration, migrations, and 12 model tests. No API endpoints, no verification service logic, and no image/document fields per security principles. 12/12 tests passing.
 - BE-013B executed: `record_delivery_verification` service added to `apps/compliance/services.py` - creates DeliveryVerification, transitions order to DELIVERED when adult+document verified, creates ComplianceEvent and marks FAILED_AGE_VERIFICATION when verification fails, no sensitive ID/data storage, 8 new tests. All 59 tests passing.
+- BE-014A completed in Codex/OpenCode after Qwen stalled: admin order list/detail endpoints added with IsAdminUser protection, internal order summaries, item summaries, and admin API tests.
+- Added compact admin prompts for BE-014B through BE-015A to reduce local AI context usage.
 - Split Block 5 into smaller admin tasks: BE-014A, BE-014B, BE-014C, BE-014D, and BE-015A.
+- BE-014B completed in Codex/OpenCode review pass: admin status update endpoint added with IsAdminUser protection, status validation, transition_order_status usage, and status history tests.
+- BE-014C reviewed: admin payment update endpoint added at PATCH /api/admin/orders/{id}/payment/ with IsAdminUser protection, method/status/amount validation, record_manual_payment() call, and payment API tests.
+- BE-014D reviewed: admin delivery verification endpoint added at POST /api/admin/orders/{id}/delivery-verification/ with IsAdminUser protection, required receiver_name, document_number/document_image field rejection, record_delivery_verification() call, username/email verified_by, and compliance API tests.
+- BE-015A reviewed: admin dashboard summary endpoint added at GET /api/admin/dashboard/summary/ with IsAdminUser protection, response containing total_orders, pending_orders, orders_by_status, confirmed_revenue (sum of total where payment_status=CONFIRMED), and dashboard API tests.
+- Block 5 review hardening applied: admin payment rejects invalid/non-finite amounts and delivery verification rejects non-boolean verification flags.
