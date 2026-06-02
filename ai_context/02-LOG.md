@@ -125,3 +125,46 @@
 - Privacy/compliance confirmed: No document_number, document_image, ID upload fields in any component. Age confirmed enforced. Safe fields only on public endpoints.
 - No product code changes made: zero backend/frontend modifications, zero dependency additions.
 - Smoke test doc created at `ai_context/21-INTEGRATION-SMOKE-TEST.md`. Report at `ai_context/11-QWEN-REPORTS/int-001-backend-frontend-smoke-test.md`.
+
+## 2026-06-02 (REVIEW-001)
+
+- REVIEW-001 full MVP consistency review report written to `ai_context/11-QWEN-REPORTS/review-001-full-mvp-consistency-review.md`.
+- Cloud review corrected report noise: no actionable issues found beyond known blockers. Remaining items are non-blocking cleanup/hardening notes (delivery verification handler grouping, optional checkout response PII minimization, env secret placeholder guidance, admin PII sensitivity note).
+- All scope/compliance confirmations passed: no product admin, no login UI/token storage, no payment gateway, no WhatsApp API, no sensitive ID/document collection.
+- All endpoints rated aligned; delivery verification handler location is a non-blocking app-boundary cleanup consideration only.
+- Recommended next task remains backend Python env bootstrap and live INT-002 smoke rerun.
+
+## 2026-06-02 (INT-002A)
+
+- INT-002A backend environment bootstrap + public smoke rerun executed.
+- Python 3.12.3 — `python3 -m venv backend/.venv` PASSED (python3.12-venv already installed on system).
+- Dependencies installed: Django 6.0.5, djangorestframework 3.17.1, django-cors-headers 4.9.0, python-dotenv 1.2.2, pytest 8.4.2, pytest-django 4.12.0.
+- Backend `.env` created from `.env.example`. Frontend `.env.local` created, contains `VITE_API_BASE_URL=http://127.0.0.1:8000/api`.
+- Backend pytest: **203 passed, 0 failed** across all 16 test files.
+- Migrations: PASSED (no migrations to apply, all already applied).
+- Seed: PASSED (idempotent; tenant, products, variants, delivery zones updated).
+- Frontend build: PASSED (33 modules, 570ms).
+- Public endpoint smoke (all PASSED):
+  - P1: GET `/api/health/` → 200 `{"status": "ok", "service": "drinklivery-backend"}`
+  - P2: GET `/api/public/drinklivery-panama/catalog/` → 200, 2 categories, 3 products
+  - P3: GET `/api/public/drinklivery-panama/delivery-zones/` → 200, 3 zones (Casco Viejo, San Francisco, Costa del Este)
+  - P4: GET `/api/public/drinklivery-panama/products/mojito-pack-x4/` → 200, product id=1, $28.00, alcoholic
+  - P5: POST order (mocktail, product_id=3) → 201, order_code ORD-A8B4FDCA, total $49.00
+  - P6: GET order status for ORD-A8B4FDCA → 200, safe fields only: order_code, status, scheduled_date, scheduled_time_window, total
+- Checkout compliance verified:
+  - Alcoholic without age confirm → 400 (age confirmation required)
+  - Alcoholic with age confirm → 201, order_code ORD-E5B9C2CA
+  - Mocktail without age confirm → 201 (age confirm not required)
+- Remaining blockers: no superuser (admin endpoints A1-A9 manual-only), server not kept running for long-polling checks.
+- Privacy/compliance confirmed satisfied. Zero product code changes made.
+- Updated `ai_context/21-INTEGRATION-SMOKE-TEST.md` with INT-002A results. Created report at `ai_context/11-QWEN-REPORTS/int-002a-backend-env-public-smoke.md`.
+- Cloud review verified backend tests (`203 passed`) and frontend build (33 modules, 570ms). Updated handoff/smoke docs to remove stale INT-001 blocker wording now resolved by INT-002A.
+
+## 2026-06-02 (INT-002B)
+
+- INT-002B admin endpoint smoke tests executed after INT-002A backend/public smoke baseline.
+- Local demo superuser/admin session used with Django session authentication and CSRF token handling for PATCH/POST requests. Credentials intentionally not recorded in docs.
+- A1-A9 all PASSED: unauthenticated admin list rejected with 403; authenticated order list/detail returned 200; status update, payment update, delivery verification, dashboard summary returned expected 200 responses; invalid payment amount and invalid delivery verification flags returned expected 400 responses.
+- Public data exposure rechecked: public order status remains safe-field-only. Public checkout returns submitted customer/address data only in the immediate 201 response and does not expose payment reference, compliance notes, verifier info, or sensitive ID fields.
+- Cloud review corrected INT-002B report wording to remove local password disclosure and clarify public checkout vs public tracking data exposure.
+- Remaining work: frontend browser QA walkthrough and admin auth strategy decision. Product code unchanged.

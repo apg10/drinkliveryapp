@@ -6,7 +6,7 @@ Backend MVP endpoints and the frontend MVP flow are implemented through the curr
 
 Frontend MVP is complete (FE-001 through FE-009) and ready for demo/staging QA against a running backend with seeded data.
 
-INT-001 smoke-test handoff is documented, but live backend verification is blocked until the local Python environment is bootstrapped (`python3.12-venv`/`ensurepip`, venv, dependencies).
+INT-002A and INT-002B live smoke are complete: backend environment bootstrapped, 203 backend tests passed, migrations/seed ran, frontend build passed, public endpoints P1-P6 passed, and admin endpoints A1-A9 passed with Django session auth. Frontend browser QA remains pending.
 
 ## Frontend Status
 
@@ -53,10 +53,10 @@ Do not restart the original backend foundation blocks. Those were historical imp
 
 Recommended next work:
 
-1. Bootstrap the backend Python environment and rerun INT-001 live backend smoke checks.
-2. Verify the frontend QA checklist in `frontend/README.md` against a running seeded backend.
-3. Decide the admin auth strategy before implementing any admin login UI or token handling.
-4. Keep product admin out of scope until backend CRUD endpoints are implemented and approved.
+1. Verify the frontend QA checklist in `frontend/README.md` against a running seeded backend.
+2. Decide the admin auth strategy before implementing any admin login UI or token handling.
+3. Keep product admin out of scope until backend CRUD endpoints are implemented and approved.
+4. Consider non-blocking cleanup/hardening only after browser QA is complete.
 
 ## Current Rules
 
