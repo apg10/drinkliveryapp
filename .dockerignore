@@ -1,0 +1,35 @@
+# Git
+.git
+git-log.txt
+
+# Virtual env
+backend/.venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env files
+.env
+.env.local
+.env.docker
+*.sqlite3
+db.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs (not needed in container)
+ai_context/
+*.md
+!README.md

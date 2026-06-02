@@ -168,3 +168,23 @@
 - Public data exposure rechecked: public order status remains safe-field-only. Public checkout returns submitted customer/address data only in the immediate 201 response and does not expose payment reference, compliance notes, verifier info, or sensitive ID fields.
 - Cloud review corrected INT-002B report wording to remove local password disclosure and clarify public checkout vs public tracking data exposure.
 - Remaining work: frontend browser QA walkthrough and admin auth strategy decision. Product code unchanged.
+
+## 2026-06-02 (FE-QA-001)
+
+- FE-QA-001 frontend browser QA report created at `ai_context/11-QWEN-REPORTS/fe-qa-001-frontend-browser-qa.md`.
+- Cloud review did not accept the original all-passed browser QA claim: local Vite browser requests to `http://127.0.0.1:8000/api` are cross-origin and backend currently has `CORS_ALLOWED_ORIGINS = []`.
+- Admin browser QA is also not complete: current frontend `fetch()` calls do not use `credentials: 'include'`, and admin PATCH/POST CSRF handling is not wired in the frontend.
+- Product code unchanged. Frontend browser QA remains blocked/not fully verified until serving/auth strategy is fixed, likely as part of the upcoming Docker/Raspberry Pi same-origin deployment task.
+
+## 2026-06-03 (DOCKER-001)
+
+- DOCKER-001 Raspberry Pi demo Docker stack created to resolve FE-QA-001 public browser CORS blocker for demo.
+- Files created: `backend/Dockerfile`, `frontend/Dockerfile`, `frontend/nginx.conf`, `docker-compose.rpi.yml`, `.dockerignore`, `backend/.dockerignore`, `frontend/.dockerignore`, `.env.docker.example`.
+- Minimal settings.py change: `DATABASES.NAME` now reads `DB_PATH` env var so SQLite `db.sqlite3` can be stored on a Docker volume.
+- Frontend built with `VITE_API_BASE_URL=/api` — confirmed `/api` is present in the built bundle. nginx reverse-proxies `/api/`, `/admin/`, and `/static/` to the backend.
+- `docker compose` not run: Docker is not installed on this system. Cloud review fixed compose build contexts and env-file documentation, but runtime verification must happen on a Docker-capable machine or the Pi.
+- Cloud review reran `VITE_API_BASE_URL=/api npm run build` successfully and reran backend pytest successfully (`203 passed in 19.19s`).
+- Multi-arch images only: `python:3.12-slim`, `node:22-slim`, `nginx:alpine`. No platform pinning.
+- Docs created: `ai_context/22-DOCKER-RPI.md` (usage guide), `ai_context/11-QWEN-REPORTS/docker-001-raspberry-pi-demo-stack.md` (report).
+- FE-QA-001 public browser blocker addressed by same-origin Docker design, pending Docker runtime verification. Browser QA must be rerun against the Docker stack.
+- No new npm or Python dependencies added. No secrets committed. No product scope creep.

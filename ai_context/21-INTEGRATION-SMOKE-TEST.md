@@ -6,7 +6,7 @@ QA/handoff task: prepare and execute a backend/frontend integration smoke test f
 
 ## Status
 
-**INT-002B completed.** Backend environment bootstrapped, all 203 tests passed, migrations applied, seed executed, frontend build passed, public endpoints P1-P6 passed, and admin endpoints A1-A9 passed with Django session auth + CSRF handling. Frontend browser QA remains pending.
+**INT-002B completed.** Backend environment bootstrapped, all 203 tests passed, migrations applied, seed executed, frontend build passed, public endpoints P1-P6 passed, and admin endpoints A1-A9 passed with Django session auth + CSRF handling. FE-QA-001 browser QA remains blocked/not fully verified due to local dev CORS and admin session/CSRF constraints.
 
 ---
 
@@ -165,8 +165,8 @@ For alcoholic product (e.g. `product_id=1`, mojito-pack-x4), `age_confirmed_by_c
 
 ## 5. Current Blockers
 
-1. **Frontend browser QA not executed yet** — API smoke is complete, but the browser walkthrough in Section 4 still needs to be done against a running seeded backend.
-2. **Frontend admin auth flow is out of scope** — Admin UI depends on an existing backend admin session; there is no login UI/token storage.
+1. **Frontend browser QA blocked/not fully verified** — API smoke is complete, but local Vite browser requests to `http://127.0.0.1:8000/api` are cross-origin and backend has `CORS_ALLOWED_ORIGINS = []`.
+2. **Frontend admin auth flow is out of scope** — Admin UI depends on an existing backend admin session; current frontend fetch calls do not send credentials or CSRF tokens for admin PATCH/POST.
 3. **Backend server may need restart for manual checks** — INT-002B started the server for admin smoke checks. Restart it if unavailable before further manual checks.
 
 Resolved in INT-002A:
@@ -437,5 +437,22 @@ Admin endpoint smoke used Django session authentication with a local demo superu
 
 ### INT-002B remaining work
 
-- Browser/frontend QA still needs to be walked manually against the running backend.
+- Browser/frontend QA still needs to be walked manually after local serving/auth strategy is fixed.
 - Admin login UI/token storage remains out of scope until auth strategy is decided.
+
+---
+
+## 15. FE-QA-001 Browser QA Review
+
+FE-QA-001 produced a browser QA report, but cloud review corrected it to blocked/not fully verified.
+
+Findings:
+
+- Local public browser flow is blocked by CORS in dev mode: frontend uses `http://localhost:5173/`, API uses `http://127.0.0.1:8000/api`, and backend has `CORS_ALLOWED_ORIGINS = []`.
+- Authenticated admin browser flow is not wired for cross-origin Django session auth: frontend fetch calls do not include credentials, and admin PATCH/POST CSRF token handling is not implemented.
+- INT-002A/INT-002B API smoke remains valid; only browser QA completion status is corrected.
+
+Recommended path for Raspberry Pi Docker demo:
+
+- Prefer same-origin serving behind a reverse proxy/container entrypoint so the frontend can call `/api` without CORS.
+- Keep admin auth strategy as a separate decision; do not add frontend login UI/token storage until approved.
