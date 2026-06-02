@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import HomeCatalog from './components/HomeCatalog'
 import ProductDetail from './components/ProductDetail'
+import CheckoutView from './components/CheckoutView'
+import OrderConfirmation from './components/OrderConfirmation'
+import OrderTracking from './components/OrderTracking'
+import AdminOrders from './components/AdminOrders'
+import AdminOrderDetail from './components/AdminOrderDetail'
 import { baseUrl, getPublicProduct } from './api'
 
 const APP_BASE_URL = baseUrl
@@ -14,6 +19,9 @@ function App() {
   const [detailError, setDetailError] = useState(null)
   const [cartItems, setCartItems] = useState([])
   const [addingToCartFeedback, setAddingToCartFeedback] = useState(false)
+  const [orderResponse, setOrderResponse] = useState(null)
+  const [trackingOrderCode, setTrackingOrderCode] = useState(null)
+  const [adminOrderId, setAdminOrderId] = useState(null)
 
   async function openDetail(productSlug) {
     setView('detail')
@@ -75,6 +83,27 @@ function App() {
   const cartTotalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const cartSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const cartTotal = cartSubtotal + (cartItems.length > 0 ? DELIVERY_FEE : 0)
+
+  function handleOrderCreated(order) {
+    setOrderResponse(order)
+    setCartItems([])
+    setView('order-confirmation')
+  }
+
+  function handleTrackOrder() {
+    setTrackingOrderCode(orderResponse?.order_code)
+    setView('tracking')
+  }
+
+  function handleReturnToCatalog() {
+    setOrderResponse(null)
+    setView('catalog')
+  }
+
+  function handleOpenAdminOrder(orderId) {
+    setAdminOrderId(orderId)
+    setView('admin-order-detail')
+  }
 
   function CartView() {
     return (
@@ -178,7 +207,7 @@ function App() {
 
         {cartItems.length > 0 && (
           <div className="cart-view__sticky">
-            <button className="cart-view__checkout-btn" onClick={() => alert('Checkout not implemented yet. This is a placeholder.')}>
+            <button className="cart-view__checkout-btn" onClick={() => setView('checkout')}>
               Continue to checkout
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
@@ -190,6 +219,41 @@ function App() {
 
   if (view === 'cart') {
     return <CartView />
+  }
+
+  if (view === 'checkout') {
+    return (
+      <CheckoutView
+        cartItems={cartItems}
+        cartSubtotal={cartSubtotal}
+        deliveryFee={DELIVERY_FEE}
+        onBackToCart={() => setView('cart')}
+        onBackToCatalog={goHome}
+        onOrderCreated={handleOrderCreated}
+      />
+    )
+  }
+
+  if (view === 'order-confirmation') {
+    return <OrderConfirmation order={orderResponse} onReturnToCatalog={handleReturnToCatalog} onTrackOrder={handleTrackOrder} />
+  }
+
+  if (view === 'tracking') {
+    return <OrderTracking orderCode={trackingOrderCode} onBackToCatalog={handleReturnToCatalog} />
+  }
+
+  if (view === 'admin-orders') {
+    return <AdminOrders onBackToCatalog={goHome} onOpenOrder={handleOpenAdminOrder} />
+  }
+
+  if (view === 'admin-order-detail') {
+    return (
+      <AdminOrderDetail
+        orderId={adminOrderId}
+        onBackToList={() => setView('admin-orders')}
+        onBackToCatalog={goHome}
+      />
+    )
   }
 
   if (view === 'detail') {
@@ -230,6 +294,9 @@ function App() {
       <div className="dev-status" title={`API base URL: ${APP_BASE_URL}`}>
         api -&gt; {APP_BASE_URL}
       </div>
+      <button className="dev-admin-btn" onClick={() => setView('admin-orders')}>
+        Admin
+      </button>
     </>
   )
 }

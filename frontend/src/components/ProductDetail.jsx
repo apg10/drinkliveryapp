@@ -24,6 +24,7 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
       price,
       quantity: qty,
       imageUrl,
+      isAlcoholic: Boolean(product.is_alcoholic),
     })
   }
 

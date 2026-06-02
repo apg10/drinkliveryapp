@@ -2,11 +2,33 @@
 
 ## Status
 
-Planning documents have been prepared for local AI execution.
+Backend MVP endpoints and the frontend MVP flow are implemented through the current public checkout/tracking and admin order operations scope.
 
-Backend implementation has not started.
+Frontend MVP is complete (FE-001 through FE-009) and ready for demo/staging QA against a running backend with seeded data.
 
-Frontend implementation has not started.
+INT-001 smoke-test handoff is documented, but live backend verification is blocked until the local Python environment is bootstrapped (`python3.12-venv`/`ensurepip`, venv, dependencies).
+
+## Frontend Status
+
+Full frontend MVP is complete through FE-009 (Demo Readiness QA Handoff).
+
+Completed and verified:
+
+- **FE-001 through FE-003A**: React + Vite skeleton, API client, public catalog fetch/display, product detail view, in-memory cart state and cart view.
+- **FE-004A through FE-004D**: Checkout view shell, delivery-zone fetch/display/select, selected-zone checkout totals, checkout submission via `POST /public/{tenant_slug}/orders/`, order confirmation, checkout review cleanup.
+- **FE-005A**: Public order tracking with `GET /public/{tenant_slug}/orders/{order_code}/status/`, safe fields only.
+- **FE-006A through FE-006D**: Admin API helpers, admin orders list with loading/error/empty/401-403 states, admin order detail view, admin dashboard summary with independent loading.
+- **FE-007A through FE-007D**: Admin mutation API helpers (status, payment, delivery verification), admin action UI panels (status update, payment recording, delivery verification) with submitting/error/success states.
+- **FE-008**: MVP end-to-end review hardening. Fixed missing `OTHER_MANUAL` payment option in public checkout.
+- **FE-009**: Demo/staging QA readiness, documentation updates, compliance confirmation, build verification.
+
+Not implemented (out of scope for MVP):
+
+- Admin login UI, token storage, or auth flows (admin access relies entirely on backend session).
+- Product admin (CRUD). Only admin read/mutation endpoints for orders are present.
+- Payment gateway integration.
+- WhatsApp API integration.
+- Sensitive ID document storage or upload (document_number, document_image remain out of scope).
 
 ## What Local AI Must Read Before Coding
 
@@ -22,26 +44,19 @@ Required context:
 - `ai_context/13-ARCHITECTURE.md`
 - `ai_context/14-ENDPOINT-MATRIX.md`
 - `ai_context/15-TEST-PLAN.md`
+- `ai_context/19-FRONTEND-EXECUTION-PLAN.md`
+- `ai_context/20-FRONTEND-QWEN-PROMPTS.md`
 
-## First Implementation Block
+## Current Recommended Next Work
 
-Start with `BLOCK-1: Backend Foundation` only.
+Do not restart the original backend foundation blocks. Those were historical implementation steps.
 
-Block 1 includes:
+Recommended next work:
 
-- `BE-001`
-- `BE-002`
-
-Each microtask must be executed in a separate local AI chat/session.
-
-Recommended Block 1 flow:
-
-1. Local AI chat for `BE-001` only.
-2. Local AI chat for `BE-002` only, if `BE-001` succeeds.
-3. Local AI chat for Block 1 summary report only.
-4. Codex/OpenCode reviews Block 1.
-
-Do not start Block 2 until Block 1 passes tests and is reviewed by Codex/OpenCode.
+1. Bootstrap the backend Python environment and rerun INT-001 live backend smoke checks.
+2. Verify the frontend QA checklist in `frontend/README.md` against a running seeded backend.
+3. Decide the admin auth strategy before implementing any admin login UI or token handling.
+4. Keep product admin out of scope until backend CRUD endpoints are implemented and approved.
 
 ## Current Rules
 
