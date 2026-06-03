@@ -6,9 +6,8 @@ import OrderConfirmation from './components/OrderConfirmation'
 import OrderTracking from './components/OrderTracking'
 import AdminOrders from './components/AdminOrders'
 import AdminOrderDetail from './components/AdminOrderDetail'
-import { baseUrl, getPublicProduct } from './api'
+import { getPublicProduct } from './api'
 
-const APP_BASE_URL = baseUrl
 const TENANT_SLUG = 'drinklivery-panama'
 const DELIVERY_FEE = 5.99
 
@@ -139,7 +138,7 @@ function App() {
                       {item.imageUrl ? (
                         <img src={item.imageUrl} alt={item.name} className="cart-item__img" />
                       ) : (
-                        <div className="cart-item__img-placeholder">DR</div>
+                        <div className="cart-item__img-placeholder">Pack</div>
                       )}
                     </div>
                     <div className="cart-item__info">
@@ -288,15 +287,10 @@ function App() {
       <HomeCatalog
         onOpenDetail={openDetail}
         onOpenCart={openCart}
+        onOpenAdmin={() => setView('admin-orders')}
         cartCount={cartTotalItems}
         cartSubtotal={cartSubtotal}
       />
-      <div className="dev-status" title={`API base URL: ${APP_BASE_URL}`}>
-        api -&gt; {APP_BASE_URL}
-      </div>
-      <button className="dev-admin-btn" onClick={() => setView('admin-orders')}>
-        Admin
-      </button>
     </>
   )
 }

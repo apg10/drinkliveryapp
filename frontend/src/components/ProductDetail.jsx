@@ -47,7 +47,9 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
             />
           )}
           <div className={`product-detail__image-placeholder ${hasImage ? 'product-detail__image-placeholder--hidden' : ''}`}>
-            <span style={{ fontSize: '3rem', opacity: 0.4 }}>DR</span>
+            <span className="product-detail__placeholder-text">
+              {product.is_alcoholic ? 'Cocktail pack' : 'Mocktail pack'}
+            </span>
           </div>
 
           <div className="product-detail__badges">

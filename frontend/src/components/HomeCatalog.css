@@ -25,11 +25,11 @@
 }
 
 .product-card__servings {
-  font-size: var(--body-sm);
-  line-height: var(--body-sm-line-height);
+  font-size: 11px;
+  line-height: 1.2;
   color: var(--on-surface-variant);
-  margin: 0 0 var(--spacing-sm) 0;
-  font-style: italic;
+  margin: 0;
+  font-style: normal;
 }
 
 /* ---------- Loading / Error / Empty States ---------- */

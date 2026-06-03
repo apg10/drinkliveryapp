@@ -188,3 +188,25 @@
 - Docs created: `ai_context/22-DOCKER-RPI.md` (usage guide), `ai_context/11-QWEN-REPORTS/docker-001-raspberry-pi-demo-stack.md` (report).
 - FE-QA-001 public browser blocker addressed by same-origin Docker design, pending Docker runtime verification. Browser QA must be rerun against the Docker stack.
 - No new npm or Python dependencies added. No secrets committed. No product scope creep.
+
+## 2026-06-03 (UI-001)
+
+- UI-001 mobile demo UI polish executed. UI polish for the Raspberry Pi demo site to make it look like a clean MVP store rather than a dev prototype.
+- Removed floating `.dev-status` line and `.dev-admin-btn` from `App.jsx` customer catalog view.
+- Added `onOpenAdmin` prop to `HomeCatalog` forwarded to `App.jsx` as `() => setView('admin-orders')`.
+- `HomeCatalog.jsx` rewrites:
+  - Removed `Events`/`Account` nav items; only `Explore` (search SVG) and `Cart` (bag SVG) remain.
+  - Replaced two-letter text icons with inline SVG icons (20x20px).
+  - Added subtle top-bar gear icon (16x16, opacity 0.45, hover to 0.9) for admin access.
+  - Hero section reduced with `.hero--compact`: `clamp()` title (24-32px), `var(--spacing-md)` padding, text-only with glow.
+  - Product cards: `clamp()` typography (name 15-18px, description 12-13px clamped 2 lines, price 17-22px), price wrapper, `+` add button (2.25rem).
+  - Image-wrap height: `clamp(120px, 17vw, 160px)`.
+  - CSS gradient placeholder (Cocktail/Mocktail uppercase text) replaces broken `<img>`.
+  - Sticky cart bar: only renders when `cartCount > 0`, `max-width: 640px`, positioned above bottom nav.
+  - Bottom nav height reduced from 5rem to 3.75rem; nav-item font to 10px; icon container 22x22px.
+  - Product grid `margin-bottom: 9rem` to account for fixed UI elements.
+- Removed stale dev CSS blocks (`.dev-status`, `.dev-admin-btn`) from `styles.css` lines 696-733.
+- `npm run build` passed (38 modules, 541ms).
+- Cloud review cleanup: removed leftover fake account avatar, removed dead API base URL code, fixed compact servings override, replaced remaining `DR` placeholders in product detail/cart fallback, and reran `npm run build` successfully.
+- Manual visual checks pending: product detail header overlap, cart bar on 320px width, gradient placeholder legibility, admin gear discoverability.
+- Report created at `ai_context/11-QWEN-REPORTS/ui-001-mobile-demo-ui-polish.md`.
