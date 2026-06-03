@@ -4,18 +4,13 @@ import './HomeCatalog.css'
 
 const TENANT_SLUG = 'drinklivery-panama'
 
-const NAV_ITEMS = [
-  { label: 'Explore', active: true, icon: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-    </svg>
-  )},
-  { label: 'Cart', active: false, icon: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
-    </svg>
-  )},
-]
+const ALCOHOLIC_ICON = (
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 12 7 16 2"/><path d="M12 7v13"/><path d="M8 22h8"/></svg>
+)
+
+const MOCKTAIL_ICON = (
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 8 7h8l-4-5z"/><path d="M12 7v15"/><path d="M8 22h8"/></svg>
+)
 
 function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, cartSubtotal = 0 }) {
   const [loading, setLoading] = useState(true)
@@ -68,54 +63,57 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
 
   return (
     <>
-      {/* Top App Bar */}
-      <header className="top-bar">
-        <div className="container top-bar__inner">
-          <div className="top-bar__brand">
-            <span className="top-bar__brand-icon">D</span>
-            <span>Drinklivery</span>
-          </div>
-          <div className="top-bar__actions">
+      {/* Glass top bar */}
+      <header className="premium-topbar">
+        <div className="premium-topbar__inner">
+          <button className="premium-topbar__location" onClick={onOpenDetail && (() => {})} aria-label="Location">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </button>
+          <span className="premium-topbar__brand">Drinklivery</span>
+          <div className="premium-topbar__right">
             {onOpenAdmin && (
               <button
-                className="top-bar__admin-link"
+                className="premium-topbar__admin"
                 onClick={onOpenAdmin}
                 aria-label="Admin"
-                title="Admin"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
               </button>
             )}
+            <button className="premium-topbar__avatar" aria-label="Profile">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+              </svg>
+            </button>
           </div>
         </div>
       </header>
 
-      <main className="container catalog-main">
+      <main className="premium-main">
         {/* Hero */}
-        <section className="hero hero--compact">
-          <div className="hero__glow" aria-hidden="true" />
-          <div className="hero__inner">
-            <div className="hero__content">
-              <h1 className="hero__title">Cocktails ready for your night</h1>
-              <p className="hero__subtitle">
-                Premium ready-to-serve cocktail and mocktail packs in Panama City.
-              </p>
-              <div className="hero__age-badge">
-                <span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M12 9v4"/><circle cx="12" cy="16" r=".5"/></svg></span>
-                <span>Must be of legal drinking age to purchase alcohol</span>
-              </div>
+        <section className="premium-hero">
+          <div className="premium-hero__glow" aria-hidden="true" />
+          <div className="premium-hero__inner">
+            <h1 className="premium-hero__title">Cocktails ready for your night</h1>
+            <p className="premium-hero__subtitle">Premium, bar-quality drinks delivered chilled to your door.</p>
+            <div className="premium-hero__age">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M12 9v4"/><circle cx="12" cy="16" r=".5"/></svg>
+              <span>Must be of legal drinking age to purchase alcohol</span>
             </div>
           </div>
         </section>
 
-        {/* Categories */}
-        <section className="categories">
-          <div className="categories__list">
+        {/* Horizontal category chips */}
+        <section className="premium-chips">
+          <div className="premium-chips__list">
             <button
-              className={`chip ${activeCat === null ? 'chip--active' : 'chip--inactive'}`}
+              className={`premium-chip ${activeCat === null ? 'premium-chip--active' : 'premium-chip--inactive'}`}
               onClick={() => handleCatToggle(null)}
             >
               All
@@ -123,7 +121,7 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
             {categories.map(cat => (
               <button
                 key={cat.id || cat.slug}
-                className={`chip ${activeCat === cat.slug ? 'chip--active' : 'chip--inactive'}`}
+                className={`premium-chip ${activeCat === cat.slug ? 'premium-chip--active' : 'premium-chip--inactive'}`}
                 onClick={() => handleCatToggle(cat.slug)}
               >
                 {cat.name}
@@ -132,61 +130,62 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
           </div>
         </section>
 
-        {/* Product Grid */}
-        <section className="product-grid">
+        {/* Product grid */}
+        <section className="premium-grid">
           {visibleProducts.map(product => {
             const alcoholic = product.is_alcoholic === true
-            const badgeLabel = alcoholic ? 'Alcohol' : 'Mocktail'
-            const badgeClass = alcoholic
-              ? 'product-card__badge-text--alcoholic'
-              : 'product-card__badge-text--mocktail'
-            const dotClass = alcoholic
-              ? 'product-card__badge-dot--alcoholic'
-              : 'product-card__badge-dot--mocktail'
+            const badgeBg = alcoholic
+              ? 'linear-gradient(135deg, rgba(160,215,87,0.15), rgba(238,192,88,0.15))'
+              : 'linear-gradient(135deg, rgba(238,192,88,0.15), rgba(160,215,87,0.15))'
+            const badgeColor = alcoholic ? 'var(--secondary)' : 'var(--tertiary)'
+            const badgeText = alcoholic ? 'Alcoholic' : 'Non-alcoholic'
 
             return (
-              <article key={product.id} className="product-card glass-panel" style={{ cursor: 'pointer' }} onClick={() => onOpenDetail && onOpenDetail(product.slug || product.id)}>
-                <div className="product-card__img-wrap">
-                  <div className="product-card__badge">
-                    <span className={`product-card__badge-dot ${dotClass}`} />
-                    <span className={`product-card__badge-text ${badgeClass}`}>
-                      {badgeLabel}
-                    </span>
-                  </div>
+              <article
+                key={product.id}
+                className="premium-card glass-panel"
+                style={{ cursor: 'pointer' }}
+                onClick={() => onOpenDetail && onOpenDetail(product.slug || product.id)}
+              >
+                <div className="premium-card__visual">
+                  <span
+                    className="premium-card__badge"
+                    style={{ background: badgeBg, color: badgeColor }}
+                  >
+                    {alcoholic ? ALCOHOLIC_ICON : MOCKTAIL_ICON}
+                    {badgeText}
+                  </span>
                   {product.image ? (
-                    <img src={product.image} alt={product.name} className="product-card__image" />
+                    <img src={product.image} alt={product.name} className="premium-card__image" />
                   ) : (
-                    <div
-                      className="product-card__img-placeholder product-card__placeholder"
-                      aria-hidden="true"
-                    >
-                      <span className="product-card__placeholder-text">
+                    <div className="premium-card__fallback" aria-hidden="true">
+                      <span className="premium-card__fallback-label">
                         {alcoholic ? 'Cocktail' : 'Mocktail'}
                       </span>
                     </div>
                   )}
                 </div>
-                <div className="product-card__body">
-                  <h3 className="product-card__name">{product.name}</h3>
+                <div className="premium-card__body">
+                  <h3 className="premium-card__name">{product.name}</h3>
                   {product.description && (
-                    <p className="product-card__desc">{product.description}</p>
+                    <p className="premium-card__desc">{product.description}</p>
                   )}
-                  <div className="product-card__footer">
-                    <div className="product-card__price-wrap">
-                      <span className="product-card__price">${product.base_price}</span>
+                  <div className="premium-card__footer">
+                    <div className="premium-card__price-wrap">
+                      <span className="premium-card__price">${product.base_price}</span>
                       {product.servings != null && (
-                        <span className="product-card__servings">Serves {product.servings}</span>
+                        <span className="premium-card__servings">Serves {product.servings}</span>
                       )}
                     </div>
                     <button
-                      className="product-card__add"
+                      className="premium-card__add"
                       aria-label={`Add ${product.name} to cart`}
                       onClick={(event) => {
                         event.stopPropagation()
                         onOpenDetail && onOpenDetail(product.slug || product.id)
                       }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     </button>
                   </div>
                 </div>
@@ -196,32 +195,37 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
         </section>
       </main>
 
-      {/* Sticky View Cart Bar */}
+      {/* Floating cart bar */}
       {cartCount > 0 && (
-        <div className="cart-bar">
-          <button className="cart-bar__btn" onClick={onOpenCart}>
-            <span className="cart-bar__label">View cart</span>
-            <span className="cart-bar__total">
-              {cartCount} item{cartCount === 1 ? '' : 's'} · ${cartSubtotal.toFixed(2)}
-            </span>
+        <div className="premium-cart-bar">
+          <button className="premium-cart-bar__btn" onClick={onOpenCart}>
+            <div className="premium-cart-bar__info">
+              <span className="premium-cart-bar__count">{cartCount}</span>
+              <div className="premium-cart-bar__text">
+                <span className="premium-cart-bar__label">Total</span>
+                <span className="premium-cart-bar__total-val">${cartSubtotal.toFixed(2)}</span>
+              </div>
+            </div>
+            <span className="premium-cart-bar__cta">View cart</span>
           </button>
         </div>
       )}
 
-      {/* Bottom Nav (mobile only) */}
-      <nav className="bottom-nav" aria-label="Main navigation">
-        <div className="bottom-nav__inner">
-          {NAV_ITEMS.map(item => (
-            <button
-              key={item.label}
-              className={`nav-item ${item.active ? 'nav-item--active' : ''}`}
-              aria-label={item.label}
-              onClick={item.label === 'Cart' ? onOpenCart : undefined}
-            >
-              <span className="nav-item__icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+      {/* Bottom nav */}
+      <nav className="premium-nav" aria-label="Main navigation">
+        <div className="premium-nav__inner">
+          <button className="premium-nav-item premium-nav-item--active" aria-label="Explore">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <span>Explore</span>
+          </button>
+          <button className="premium-nav-item" aria-label="Cart" onClick={onOpenCart}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>{cartCount > 0 ? `Cart (${cartCount})` : 'Cart'}</span>
+          </button>
         </div>
       </nav>
 
