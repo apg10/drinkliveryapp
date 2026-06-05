@@ -88,17 +88,17 @@ class SeedDrinkliveryPanamaCatalogTest(TestCase):
         self.assertTrue(mojito.is_alcoholic)
         self.assertEqual(mojito.base_price, Decimal('28.00'))
         self.assertEqual(mojito.servings, 4)
-        self.assertEqual(mojito.image, '/catalog/mojito-pack-x4.webp')
+        self.assertEqual(mojito.image, '/catalog/mojito01.png')
         margarita = tenant.products.get(slug='margarita-pack-x4')
         self.assertTrue(margarita.is_alcoholic)
         self.assertEqual(margarita.base_price, Decimal('32.00'))
         self.assertEqual(margarita.servings, 4)
-        self.assertEqual(margarita.image, '/catalog/margarita-pack-x4.webp')
+        self.assertEqual(margarita.image, '/catalog/margarita_pack.png')
         mocktail = tenant.products.get(slug='passion-fruit-mocktail-pack-x4')
         self.assertFalse(mocktail.is_alcoholic)
         self.assertEqual(mocktail.base_price, Decimal('22.00'))
         self.assertEqual(mocktail.servings, 4)
-        self.assertEqual(mocktail.image, '/catalog/passion-fruit-mocktail-pack-x4.webp')
+        self.assertEqual(mocktail.image, '/catalog/passionfruit.png')
 
     def test_command_creates_variants(self):
         call_command('seed_drinklivery_panama')
@@ -201,7 +201,7 @@ class SeedDrinkliveryPanamaUpdateExistingTest(TestCase):
         self.assertEqual(mojito.base_price, Decimal('28.00'))
         self.assertEqual(mojito.servings, 4)
         self.assertTrue(mojito.is_active)
-        self.assertEqual(mojito.image, '/catalog/mojito-pack-x4.webp')
+        self.assertEqual(mojito.image, '/catalog/mojito01.png')
 
     def test_running_again_updates_existing_variant(self):
         mojito = self.tenant.products.get(slug='mojito-pack-x4')

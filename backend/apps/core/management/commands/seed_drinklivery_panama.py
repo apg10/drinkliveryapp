@@ -122,7 +122,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('28.00'),
                 'is_alcoholic': True,
                 'servings': 4,
-                'image': '/catalog/mojito-pack-x4.webp',
+                'image': '/catalog/mojito01.png',
             },
             {
                 'name': 'Margarita Pack x4',
@@ -132,7 +132,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('32.00'),
                 'is_alcoholic': True,
                 'servings': 4,
-                'image': '/catalog/margarita-pack-x4.webp',
+                'image': '/catalog/margarita_pack.png',
             },
             {
                 'name': 'Passion Fruit Mocktail Pack x4',
@@ -142,7 +142,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('22.00'),
                 'is_alcoholic': False,
                 'servings': 4,
-                'image': '/catalog/passion-fruit-mocktail-pack-x4.webp',
+                'image': '/catalog/passionfruit.png',
             },
         ]
 
