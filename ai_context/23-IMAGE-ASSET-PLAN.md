@@ -1,0 +1,472 @@
+# Drinklivery Image Asset Plan
+
+## Goal
+
+Leave Drinklivery with a complete, consistent image set for the MVP UI, generated with ComfyUI and integrated through narrow Qwen/local AI tasks.
+
+This plan separates image generation from code integration. Generate and review assets first. Then assign one Qwen microtask at a time for code changes.
+
+## Current App Findings
+
+The app currently has no files in `frontend/public/`.
+
+Product images are already supported by the data model and frontend:
+
+- Backend `Product.image` is a string field.
+- Public catalog and detail serializers expose `image`.
+- `HomeCatalog.jsx` renders `product.image` in catalog cards.
+- `ProductDetail.jsx` renders `product.image` in the product hero.
+- Cart items carry `imageUrl` from the selected product.
+- Checkout summary currently does not render product thumbnails.
+
+Brand metadata images are missing:
+
+- `frontend/index.html` has no favicon.
+- `frontend/index.html` has no Apple touch icon.
+- `frontend/index.html` has no Open Graph or social preview image.
+
+Most state visuals currently use CSS and SVG icons. These do not require generated raster images for MVP.
+
+## Asset Directory Convention
+
+Use Vite public assets so URLs are stable and simple:
+
+- Source folder: `frontend/public/`
+- Runtime URL prefix: `/`
+- Product image folder: `frontend/public/catalog/`
+- Brand image folder: `frontend/public/brand/`
+
+Preferred formats:
+
+- Product and hero images: `.webp`
+- Favicon/Apple icons: `.png` or `.svg`
+- Social preview: `.webp` or `.png`
+
+## Required MVP Assets
+
+### Product Images
+
+These are required because they improve catalog, product detail, cart, and checkout continuity.
+
+| Product | File | Runtime URL | Size |
+| --- | --- | --- | --- |
+| Mojito Pack x4 | `frontend/public/catalog/mojito-pack-x4.webp` | `/catalog/mojito-pack-x4.webp` | `1600x1000` |
+| Margarita Pack x4 | `frontend/public/catalog/margarita-pack-x4.webp` | `/catalog/margarita-pack-x4.webp` | `1600x1000` |
+| Passion Fruit Mocktail Pack x4 | `frontend/public/catalog/passion-fruit-mocktail-pack-x4.webp` | `/catalog/passion-fruit-mocktail-pack-x4.webp` | `1600x1000` |
+
+### Brand Images
+
+These are required for browser/mobile polish and share previews.
+
+| Purpose | File | Runtime URL | Size |
+| --- | --- | --- | --- |
+| App icon source | `frontend/public/brand/drinklivery-icon-1024.png` | `/brand/drinklivery-icon-1024.png` | `1024x1024` |
+| Apple touch icon | `frontend/public/apple-touch-icon.png` | `/apple-touch-icon.png` | `180x180` |
+| Favicon | `frontend/public/favicon.png` | `/favicon.png` | `64x64` |
+| Social preview | `frontend/public/brand/drinklivery-og.webp` | `/brand/drinklivery-og.webp` | `1200x630` |
+
+## Optional Enhancement Assets
+
+Only add these if the MVP starts feeling too plain after required assets are integrated.
+
+| Purpose | File | Runtime URL | Size |
+| --- | --- | --- | --- |
+| Home hero background | `frontend/public/brand/drinklivery-hero.webp` | `/brand/drinklivery-hero.webp` | `1920x1080` |
+| Order placed visual | `frontend/public/brand/order-placed.webp` | `/brand/order-placed.webp` | `1200x900` |
+| Tracking visual | `frontend/public/brand/order-tracking.webp` | `/brand/order-tracking.webp` | `1200x900` |
+
+Recommendation: do not add optional assets until the required product and brand assets are done.
+
+## ComfyUI Settings
+
+Recommended starting settings for realistic product assets:
+
+- Size: `1600x1000` or closest supported equivalent.
+- Steps: `24-32`.
+- CFG: `3.5-5.5`.
+- Sampler: `dpmpp_2m`, `euler`, or best available local sampler.
+- Batch size: `1` while tuning.
+- Seed: fixed per final asset once a good composition is found.
+
+Use a shared style prompt to keep the catalog coherent:
+
+```text
+premium cocktail product photography, chilled ready-to-drink delivery pack, elegant glassware, fresh ingredients, condensation, tropical Panama nightlife mood, dark luxury background, warm coral highlights, emerald and gold accent light, realistic commercial photo, shallow depth of field, clean composition, no text, no logo, no people, no hands
+```
+
+Use this negative prompt for all product images:
+
+```text
+text, logo, watermark, brand name, label text, people, hands, face, distorted glass, broken glass, messy table, low quality, blurry, cartoon, illustration, oversaturated, duplicate objects, unreadable labels, unsafe content
+```
+
+## Product Prompts
+
+### Mojito Pack x4
+
+```text
+premium mojito cocktail pack, four elegant mojito glasses arranged as a delivery-ready cocktail set, fresh mint leaves, lime wedges, crushed ice, sparkling soda bubbles, clear white rum cocktail presentation, condensation on glass, dark emerald and warm gold lighting, luxury tropical night bar atmosphere, realistic commercial product photography, no text, no logo, no people, no hands
+```
+
+### Margarita Pack x4
+
+```text
+premium margarita cocktail pack, four elegant margarita glasses arranged as a delivery-ready cocktail set, salted rims, fresh lime wedges, pale golden tequila cocktail, crushed ice, subtle citrus garnish, condensation on glass, dark luxury background with warm amber and coral highlights, realistic commercial product photography, no text, no logo, no people, no hands
+```
+
+### Passion Fruit Mocktail Pack x4
+
+```text
+premium passion fruit mocktail pack, four tropical mocktail glasses arranged as a delivery-ready non alcoholic set, passion fruit pulp, orange and yellow gradient drink, fresh mint, citrus garnish, ice, condensation on glass, vibrant tropical luxury background, emerald and gold accent light, realistic commercial product photography, no text, no logo, no people, no hands
+```
+
+## Brand Prompts
+
+### App Icon Source
+
+Avoid text because AI-generated lettering is unreliable. Generate an icon mark only.
+
+```text
+minimal premium app icon, cocktail coupe glass combined with fast delivery motion shape, tropical nightlife color palette, dark navy background, coral highlight, emerald accent, clean vector-like symbol, centered composition, high contrast, no text, no letters, no logo words, no people
+```
+
+### Social Preview
+
+```text
+premium Drinklivery cocktail delivery social preview background, elegant cocktail glasses and delivery-ready drink packs on dark tropical nightlife scene, Panama City evening mood, coral and emerald lighting, luxury glassmorphism style, wide composition with clean empty space in the center for future title overlay, realistic commercial photography, no text, no logo, no people, no hands
+```
+
+### Optional Home Hero
+
+```text
+premium cocktail delivery hero background, chilled cocktail packs and elegant glasses on a dark tropical bar counter, Panama nightlife mood, coral glow, emerald accent light, luxury glassmorphism aesthetic, cinematic wide composition, clean left side for headline readability, realistic commercial photography, no text, no logo, no people, no hands
+```
+
+## Manual Asset QA Checklist
+
+Before assigning Qwen integration tasks, verify each generated asset:
+
+1. No visible text, watermark, or fake brand labels.
+2. No people, hands, faces, IDs, or compliance-sensitive documents.
+3. Product count looks intentional and close to the product pack size.
+4. Image still works when center-cropped to `16:10` and `14:9`.
+5. File size is reasonable after WebP export.
+6. Product color matches the actual drink.
+7. Mocktail does not visually imply alcohol bottles.
+
+## Qwen Task IMG-000: Prepare Frontend Asset Folders
+
+Use before generating images. This prepares the frontend public asset locations and documents the exact files ComfyUI should export.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: IMG-000.
+Do not start IMG-001 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/23-IMAGE-ASSET-PLAN.md
+- frontend/index.html
+- frontend/package.json
+
+Task:
+Prepare the frontend public asset folders for Drinklivery image generation.
+
+Allowed files to modify:
+- frontend/public/README.md
+- frontend/public/catalog/.gitkeep
+- frontend/public/brand/.gitkeep
+- ai_context/11-QWEN-REPORTS/img-000-frontend-asset-folders.md
+
+Forbidden changes:
+- Do not modify backend files.
+- Do not modify React source files.
+- Do not modify frontend/index.html yet.
+- Do not add generated images in this task.
+- Do not add dependencies.
+- Do not add a manifest or service worker.
+- Do not commit or push.
+- Do not use git add .
+
+Implementation requirements:
+- Create `frontend/public/catalog/` and `frontend/public/brand/` if missing.
+- Add `.gitkeep` files so both folders are tracked before generated images exist.
+- Create `frontend/public/README.md` documenting the required image filenames and runtime URLs from `ai_context/23-IMAGE-ASSET-PLAN.md`.
+- The README must mention that generated files should avoid text, logos, people, hands, watermarks, and sensitive ID/document imagery.
+- Keep the README concise.
+
+Command to run:
+- From frontend/: npm run build
+
+Report file:
+- ai_context/11-QWEN-REPORTS/img-000-frontend-asset-folders.md
+
+Report must include:
+- Summary.
+- Files changed.
+- Build result.
+- Confirmation that no generated images, React code, backend code, dependencies, manifest, or service worker were added.
+```
+
+## Qwen Task IMG-001: Integrate Product Image URLs In Seed
+
+Use after IMG-000 is complete. The image files may be generated before or after this task, but their final filenames must match the URLs below.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: IMG-001.
+Do not start IMG-002 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/23-IMAGE-ASSET-PLAN.md
+- backend/apps/core/management/commands/seed_drinklivery_panama.py
+- backend/apps/core/tests/test_seed_drinklivery_panama.py
+- backend/apps/products/serializers.py
+- frontend/src/components/HomeCatalog.jsx
+- frontend/src/components/ProductDetail.jsx
+
+Task:
+Set stable product image URLs in the Drinklivery Panama seed data.
+
+Allowed files to modify:
+- backend/apps/core/management/commands/seed_drinklivery_panama.py
+- backend/apps/core/tests/test_seed_drinklivery_panama.py
+- ai_context/11-QWEN-REPORTS/img-001-product-image-seed.md
+
+Forbidden changes:
+- Do not modify frontend files.
+- Do not modify migrations.
+- Do not add dependencies.
+- Do not change product slugs, names, prices, servings, variants, categories, or compliance fields.
+- Do not add media upload handling.
+- Do not commit or push.
+- Do not use git add .
+
+Implementation requirements:
+- Add image URLs to products_data using exactly these values:
+  - Mojito Pack x4: /catalog/mojito-pack-x4.webp
+  - Margarita Pack x4: /catalog/margarita-pack-x4.webp
+  - Passion Fruit Mocktail Pack x4: /catalog/passion-fruit-mocktail-pack-x4.webp
+- Ensure existing products are updated idempotently when the seed command runs again.
+- Update the seed tests to assert the image URLs are set.
+- Keep the change minimal.
+
+Command to run:
+- From backend/: pytest apps/core/tests/test_seed_drinklivery_panama.py
+
+Report file:
+- ai_context/11-QWEN-REPORTS/img-001-product-image-seed.md
+
+Report must include:
+- Summary.
+- Files changed.
+- Test command run.
+- Test result.
+- Confirmation that no frontend code, migrations, media upload, or compliance-sensitive fields were added.
+```
+
+## Qwen Task IMG-001A: Harden Missing Image Fallbacks
+
+Use after IMG-001. This prevents broken image icons while generated product files are still missing or being replaced.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: IMG-001A.
+Do not start IMG-002 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/23-IMAGE-ASSET-PLAN.md
+- frontend/src/components/HomeCatalog.jsx
+- frontend/src/components/ProductDetail.jsx
+- frontend/src/App.jsx
+- frontend/src/components/HomeCatalog.css
+- frontend/src/styles.css
+
+Task:
+Make product image rendering resilient when seeded image URLs point to files that do not exist yet.
+
+Allowed files to modify:
+- frontend/src/components/HomeCatalog.jsx
+- frontend/src/App.jsx
+- frontend/src/components/HomeCatalog.css
+- frontend/src/styles.css
+- ai_context/11-QWEN-REPORTS/img-001a-missing-image-fallbacks.md
+
+Forbidden changes:
+- Do not modify backend files.
+- Do not modify product image URLs or seed data.
+- Do not add generated images.
+- Do not add dependencies.
+- Do not change checkout API payloads or public API helpers.
+- Do not redesign the UI.
+- Do not commit or push.
+- Do not use git add .
+
+Implementation requirements:
+- In `HomeCatalog.jsx`, if a product image fails to load, render the existing cocktail/mocktail fallback instead of leaving a broken image icon.
+- Keep the existing fallback visual classes and badge behavior.
+- In `App.jsx` cart rendering, if a cart item image fails to load, render the existing `cart-item__img-placeholder` instead of a broken image icon.
+- Keep the change minimal and local to image failure behavior.
+- `ProductDetail.jsx` already has image error handling; do not change it unless a clear bug is found.
+- Add CSS only if needed for the cart placeholder or fallback to remain visually consistent.
+
+Command to run:
+- From frontend/: npm run build
+
+Report file:
+- ai_context/11-QWEN-REPORTS/img-001a-missing-image-fallbacks.md
+
+Report must include:
+- Summary.
+- Files changed.
+- Build result.
+- Explanation of catalog and cart broken-image fallback behavior.
+- Confirmation that no backend code, generated images, dependencies, API payloads, or seed URLs were changed.
+```
+
+## Qwen Task IMG-002: Add Browser And Social Metadata
+
+Use after brand icon, favicon, Apple icon, and social preview assets exist.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: IMG-002.
+Do not start IMG-003 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/23-IMAGE-ASSET-PLAN.md
+- frontend/index.html
+- frontend/package.json
+
+Task:
+Add browser icon and social preview metadata for Drinklivery.
+
+Allowed files to modify:
+- frontend/index.html
+- ai_context/11-QWEN-REPORTS/img-002-brand-metadata.md
+
+Forbidden changes:
+- Do not modify backend files.
+- Do not modify React source files.
+- Do not add dependencies.
+- Do not add PWA service workers or manifests in this task.
+- Do not commit or push.
+- Do not use git add .
+
+Implementation requirements:
+- Add favicon link to `/favicon.png`.
+- Add Apple touch icon link to `/apple-touch-icon.png`.
+- Add `theme-color` matching the dark Drinklivery UI.
+- Add Open Graph title, description, type, image, and site name.
+- Add Twitter card title, description, and image.
+- Use `/brand/drinklivery-og.webp` for social preview image.
+- Preserve existing font links and title.
+
+Command to run:
+- From frontend/: npm run build
+
+Report file:
+- ai_context/11-QWEN-REPORTS/img-002-brand-metadata.md
+
+Report must include:
+- Summary.
+- Files changed.
+- Build result.
+- Metadata tags added.
+```
+
+## Qwen Task IMG-003: Add Checkout Thumbnails
+
+Use after IMG-002. This makes checkout visually consistent with catalog/cart before final generated images are available.
+
+```text
+You are Qwen/local AI working on Drinklivery.
+
+Important execution rule:
+This chat/session is for exactly one microtask: IMG-003.
+Do not start IMG-004 or any other task in this chat.
+
+Read these files from disk before editing:
+- ai_context/03-WORKER-PROTOCOL.md
+- ai_context/23-IMAGE-ASSET-PLAN.md
+- frontend/src/components/CheckoutView.jsx
+- frontend/src/styles.css
+- frontend/src/App.jsx
+- frontend/src/components/ProductDetail.jsx
+
+Task:
+Show resilient product thumbnails in the checkout summary using existing cart item imageUrl data.
+
+Allowed files to modify:
+- frontend/src/components/CheckoutView.jsx
+- frontend/src/styles.css
+- ai_context/11-QWEN-REPORTS/img-003-checkout-thumbnails.md
+
+Forbidden changes:
+- Do not modify backend files.
+- Do not modify App.jsx or ProductDetail.jsx unless imageUrl is proven missing.
+- Do not change checkout payload or API calls.
+- Do not add dependencies.
+- Do not add new product data.
+- Do not commit or push.
+- Do not use git add .
+
+Implementation requirements:
+- In checkout summary rows, render a small thumbnail when `item.imageUrl` exists and has not failed to load.
+- If a checkout thumbnail image fails to load, render a small placeholder instead of a broken image icon.
+- If `item.imageUrl` is empty, render the same small placeholder.
+- Keep the existing item name, variant name, quantity, alcohol badge, and price behavior.
+- Add CSS for the thumbnail container, image, placeholder, text grouping, and row alignment.
+- Keep summary subtotal, delivery fee, and total rows visually unchanged except as needed to avoid selector conflicts.
+- Keep the UI mobile-first and consistent with the current dark glass style.
+- Do not add product images or alter asset paths.
+
+Command to run:
+- From frontend/: npm run build
+
+Report file:
+- ai_context/11-QWEN-REPORTS/img-003-checkout-thumbnails.md
+
+Report must include:
+- Summary.
+- Files changed.
+- Build result.
+- Explanation of checkout thumbnail and missing-image fallback behavior.
+- Confirmation that checkout API payload, backend files, generated images, dependencies, and asset paths were not changed.
+```
+
+## Deferred Qwen Tasks
+
+Do not assign these until the required assets are integrated and reviewed.
+
+- `IMG-004`: Add optional home hero image treatment.
+- `IMG-005`: Add optional order confirmation/tracking illustrations.
+- `IMG-006`: Add a web app manifest if Drinklivery becomes installable.
+
+## Execution Order
+
+1. Assign Qwen `IMG-000` to prepare frontend asset folders and documentation.
+2. Review Qwen report and diff.
+3. Assign Qwen `IMG-001` to wire stable product image URLs in seed data.
+4. Review Qwen report and diff.
+5. Assign Qwen `IMG-001A` to prevent broken image icons while assets are pending.
+6. Review Qwen report and diff.
+7. Generate product images in ComfyUI.
+8. Export product images into `frontend/public/catalog/`.
+9. Generate brand icon and social preview images.
+10. Export brand images into `frontend/public/brand/` plus root favicon files.
+11. Manually QA assets using the checklist above.
+12. Assign Qwen `IMG-002`.
+13. Review Qwen report and diff.
+14. Decide whether `IMG-003` is worth doing.

@@ -19,6 +19,15 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
   const [products, setProducts] = useState([])
   const [activeCat, setActiveCat] = useState(null)
   const [reloadKey, setReloadKey] = useState(0)
+  const [failedImages, setFailedImages] = useState(new Set())
+
+  function handleImageError(imageUrl) {
+    setFailedImages(prev => {
+      const next = new Set(prev)
+      next.add(imageUrl)
+      return next
+    })
+  }
 
   useEffect(() => {
     let mounted = true
@@ -134,10 +143,6 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
         <section className="premium-grid">
           {visibleProducts.map(product => {
             const alcoholic = product.is_alcoholic === true
-            const badgeBg = alcoholic
-              ? 'linear-gradient(135deg, rgba(160,215,87,0.15), rgba(238,192,88,0.15))'
-              : 'linear-gradient(135deg, rgba(238,192,88,0.15), rgba(160,215,87,0.15))'
-            const badgeColor = alcoholic ? 'var(--secondary)' : 'var(--tertiary)'
             const badgeText = alcoholic ? 'Alcoholic' : 'Non-alcoholic'
 
             return (
@@ -149,17 +154,19 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
               >
                 <div className="premium-card__visual">
                   <span
-                    className="premium-card__badge"
-                    style={{ background: badgeBg, color: badgeColor }}
+                    className={`premium-card__badge ${alcoholic ? 'premium-card__badge--alcoholic' : 'premium-card__badge--mocktail'}`}
                   >
                     {alcoholic ? ALCOHOLIC_ICON : MOCKTAIL_ICON}
                     {badgeText}
                   </span>
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="premium-card__image" />
+                  {(product.image && !failedImages.has(product.image)) ? (
+                    <img src={product.image} alt={product.name} className="premium-card__image" onError={() => handleImageError(product.image)} />
                   ) : (
-                    <div className="premium-card__fallback" aria-hidden="true">
-                      <span className="premium-card__fallback-label">
+                    <div
+                      className={`premium-card__fallback ${alcoholic ? 'premium-card__fallback--cocktail' : 'premium-card__fallback--mocktail'}`}
+                      aria-hidden="true"
+                    >
+                      <span className={`premium-card__fallback-label ${!alcoholic ? 'premium-card__fallback-label--mocktail' : ''}`}>
                         {alcoholic ? 'Cocktail' : 'Mocktail'}
                       </span>
                     </div>

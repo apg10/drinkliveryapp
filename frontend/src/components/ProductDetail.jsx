@@ -1,15 +1,22 @@
 import { useState } from 'react'
 
 function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false }) {
+  const [selectedBase, setSelectedBase] = useState(true)
   const [selectedVariant, setSelectedVariant] = useState(null)
   const [qty, setQty] = useState(1)
   const [imageFailed, setImageFailed] = useState(false)
 
   const variants = product.variants && product.variants.length > 0 ? product.variants : []
-  const price = Number(selectedVariant?.price ?? product.base_price ?? 0)
+  const hasBaseOption = product.base_price != null
+  const isBaseSelected = selectedBase && !selectedVariant
+  const price = isBaseSelected
+    ? Number(product.base_price ?? 0)
+    : Number(selectedVariant?.price ?? product.base_price ?? 0)
   const imageUrl = product.image || ''
   const hasImage = imageUrl && imageUrl.trim() !== '' && !imageFailed
-  const variantName = selectedVariant?.name || ''
+  const variantName = isBaseSelected
+    ? ''
+    : (selectedVariant?.name || '')
   const servings = selectedVariant?.servings ?? product.servings
 
   const isAlcoholic = product.is_alcoholic === true
@@ -17,17 +24,34 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
   function handleAddToCart() {
     if (!onAddToCart) return
 
+    const hasVariant = !!selectedVariant
+    const effectiveKey = hasVariant
+      ? `${product.id}-${selectedVariant.id}`
+      : `${product.id}-base`
+    const effectiveVariantId = hasVariant ? selectedVariant.id : null
+    const effectiveVariantName = hasVariant ? (selectedVariant.name || '') : ''
+
     onAddToCart({
-      key: `${product.id}-${selectedVariant?.id ?? 'base'}`,
+      key: effectiveKey,
       productId: product.id,
-      variantId: selectedVariant?.id ?? null,
+      variantId: effectiveVariantId,
       name: product.name,
-      variantName,
+      variantName: effectiveVariantName,
       price,
       quantity: qty,
       imageUrl,
       isAlcoholic,
     })
+  }
+
+  function handleSelectBase() {
+    setSelectedBase(true)
+    setSelectedVariant(null)
+  }
+
+  function handleSelectVariant(variant) {
+    setSelectedBase(false)
+    setSelectedVariant(variant)
   }
 
   const heroHeight = hasImage ? '' : 'premium-detail__visual--compact'
@@ -85,7 +109,7 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
             <span className="premium-detail__price">${price.toFixed(2)}</span>
           </div>
 
-          {variantName && (
+          {variantName && !isBaseSelected && (
             <span className="premium-detail__variant-label-text">{variantName}</span>
           )}
 
@@ -115,10 +139,30 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
             <div className="premium-detail__variants-section">
               <h3 className="premium-detail__section-label">Select Size</h3>
               <div className="premium-detail__variants-grid">
+                {/* Base option */}
+                {hasBaseOption && (
+                  <div className="premium-detail__variant-item">
+                    <input
+                      type="radio"
+                      id="variant-base"
+                      name="variant"
+                      className="premium-detail__variant-radio"
+                      checked={isBaseSelected}
+                      onChange={handleSelectBase}
+                    />
+                    <label
+                      htmlFor="variant-base"
+                      className={`premium-detail__variant-label ${isBaseSelected ? 'premium-detail__variant-label--active' : ''}`}
+                    >
+                      <span className="premium-detail__variant-label-name">{product.name}</span>
+                      <span className="premium-detail__variant-label-price">${Number(product.base_price ?? 0).toFixed(2)}</span>
+                    </label>
+                  </div>
+                )}
                 {variants.map((variant, idx) => {
                   const vName = variant.name || variant.label || `Variant ${idx + 1}`
                   const vPrice = Number(variant.price ?? product.base_price ?? 0)
-                  const isSelected = selectedVariant?.id === variant.id
+                  const isSelected = !selectedBase && selectedVariant?.id === variant.id
 
                   return (
                     <div key={variant.id ?? idx} className="premium-detail__variant-item">
@@ -128,7 +172,7 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
                         name="variant"
                         className="premium-detail__variant-radio"
                         checked={isSelected}
-                        onChange={() => setSelectedVariant(variant)}
+                        onChange={() => handleSelectVariant(variant)}
                       />
                       <label
                         htmlFor={`variant-${variant.id ?? idx}`}
@@ -144,29 +188,6 @@ function ProductDetail({ product, onBack, onAddToCart, addingFeedback = false })
             </div>
           )}
 
-          {/* Quantity */}
-          <div className="premium-detail__qty-section">
-            <h3 className="premium-detail__section-label">Quantity</h3>
-            <div className="premium-detail__qty-wrap">
-              <button
-                className="premium-detail__qty-btn"
-                onClick={() => setQty(q => Math.max(1, q - 1))}
-                aria-label="Decrease quantity"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-              </button>
-              <span className="premium-detail__qty-value">{qty}</span>
-              <button
-                className="premium-detail__qty-btn"
-                onClick={() => setQty(q => q + 1)}
-                aria-label="Increase quantity"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Bottom spacer for fixed CTA */}
           <div className="premium-detail__cta-spacer" />
         </div>
       </div>

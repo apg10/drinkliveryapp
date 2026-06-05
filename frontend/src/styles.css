@@ -2477,6 +2477,53 @@ a {
   letter-spacing: var(--label-caps-letter-spacing);
 }
 
+/* === Checkout summary thumbnails (IMG-003) === */
+
+.checkout-view__summary-row--thumb {
+  align-items: flex-start;
+}
+
+.checkout-view__thumb-wrap {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-right: var(--spacing-sm);
+  margin-top: 2px;
+}
+
+.checkout-view__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.checkout-view__thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-size: var(--label-caps);
+  font-weight: 600;
+  letter-spacing: var(--label-caps-letter-spacing);
+}
+
+.checkout-view__summary-row__text-group {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.checkout-view__summary-row--thumb .checkout-view__item-price {
+  flex-shrink: 0;
+  margin-left: var(--spacing-sm);
+  text-align: right;
+}
+
 /* === Delivery Zones (FE-004B2) === */
 
 .delivery-zones-section {
@@ -3638,52 +3685,6 @@ a {
 .premium-detail__variant-label-price {
   font-size: 11px;
   color: var(--on-surface-variant);
-}
-
-/* Quantity (in-content section) */
-.premium-detail__qty-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.premium-detail__qty-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  background: var(--glass-background);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  height: 2.75rem;
-}
-
-.premium-detail__qty-btn {
-  width: 2.5rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--on-surface-variant);
-  transition: color 0.2s;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.premium-detail__qty-btn:hover {
-  color: var(--primary);
-}
-
-.premium-detail__qty-value {
-  width: 2rem;
-  text-align: center;
-  font-family: var(--font-headline);
-  font-size: var(--body-lg);
-  font-weight: 600;
-  color: var(--on-surface);
-  user-select: none;
 }
 
 /* Bottom spacer */

@@ -122,6 +122,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('28.00'),
                 'is_alcoholic': True,
                 'servings': 4,
+                'image': '/catalog/mojito-pack-x4.webp',
             },
             {
                 'name': 'Margarita Pack x4',
@@ -131,6 +132,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('32.00'),
                 'is_alcoholic': True,
                 'servings': 4,
+                'image': '/catalog/margarita-pack-x4.webp',
             },
             {
                 'name': 'Passion Fruit Mocktail Pack x4',
@@ -140,6 +142,7 @@ class Command(BaseCommand):
                 'base_price': Decimal('22.00'),
                 'is_alcoholic': False,
                 'servings': 4,
+                'image': '/catalog/passion-fruit-mocktail-pack-x4.webp',
             },
         ]
 
@@ -155,6 +158,7 @@ class Command(BaseCommand):
                     'base_price': prod_data['base_price'],
                     'is_alcoholic': prod_data['is_alcoholic'],
                     'servings': prod_data['servings'],
+                    'image': prod_data.get('image', ''),
                     'is_active': True,
                     'display_order': 0,
                 },
@@ -166,11 +170,12 @@ class Command(BaseCommand):
                 prod.base_price = prod_data['base_price']
                 prod.is_alcoholic = prod_data['is_alcoholic']
                 prod.servings = prod_data['servings']
+                prod.image = prod_data.get('image', '')
                 prod.is_active = True
                 prod.save(
                     update_fields=[
                         'name', 'description', 'category', 'base_price',
-                        'is_alcoholic', 'servings',
+                        'is_alcoholic', 'servings', 'image',
                         'is_active', 'updated_at',
                     ]
                 )

@@ -105,6 +105,16 @@ function App() {
   }
 
   function CartView() {
+    const [failedCartImages, setFailedCartImages] = useState(new Set())
+
+    function handleCartItemImageError(imageUrl) {
+      setFailedCartImages(prev => {
+        const next = new Set(prev)
+        next.add(imageUrl)
+        return next
+      })
+    }
+
     return (
       <div className="cart-view">
         <div className="cart-view__header">
@@ -135,8 +145,8 @@ function App() {
                 <div key={item.key} className="cart-item glass-panel">
                   <div className="cart-item__row">
                     <div className="cart-item__img-wrap">
-                      {item.imageUrl ? (
-                        <img src={item.imageUrl} alt={item.name} className="cart-item__img" />
+                      {item.imageUrl && !failedCartImages.has(item.imageUrl) ? (
+                        <img src={item.imageUrl} alt={item.name} className="cart-item__img" onError={() => handleCartItemImageError(item.imageUrl)} />
                       ) : (
                         <div className="cart-item__img-placeholder">Pack</div>
                       )}

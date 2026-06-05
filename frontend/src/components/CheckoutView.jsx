@@ -7,6 +7,12 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
   const isEmpty = cartItems.length === 0
   const hasAlcoholic = cartItems.some(item => item.isAlcoholic === true)
 
+  const [failedCheckoutImages, setFailedCheckoutImages] = useState(new Set())
+
+  function handleThumbImageError(imageUrl) {
+    setFailedCheckoutImages(prev => new Set(prev).add(imageUrl))
+  }
+
   const [form, setForm] = useState({
     customer: { full_name: '', phone: '', email: '' },
     address: { address_line: '', building_details: '', city: '', delivery_notes: '' },
@@ -442,26 +448,38 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
         </div>
 
         <div className="checkout-view__summary glass-panel">
-          {cartItems.map(item => (
-            <div key={item.key} className="checkout-view__summary-row">
-              <span className="checkout-view__item-label">
-                {item.isAlcoholic && (
-                  <span className="checkout-view__beer-badge" title="Alcohol — age restriction applies">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
-                      <path d="M3 8h14a4 4 0 0 1 0 8H6"/>
-                      <path d="M7 8V6a2 2 0 0 1 2-2h1a4 4 0 0 1 3.7 2.1"/>
-                      <path d="M7 8V5a2 2 0 0 1 2-2"/>
-                    </svg>
+          {cartItems.map(item => {
+            const hasThumb = item.imageUrl && item.imageUrl !== ''
+            return (
+              <div key={item.key} className="checkout-view__summary-row checkout-view__summary-row--thumb">
+                <div className="checkout-view__thumb-wrap">
+                  {hasThumb && !failedCheckoutImages.has(item.imageUrl) ? (
+                    <img src={item.imageUrl} alt={item.name} className="checkout-view__thumb-img" onError={() => handleThumbImageError(item.imageUrl)} />
+                  ) : (
+                    <div className="checkout-view__thumb-placeholder"><span>Pack</span></div>
+                  )}
+                </div>
+                <div className="checkout-view__summary-row__text-group">
+                  <span className="checkout-view__item-label">
+                    {item.isAlcoholic && (
+                      <span className="checkout-view__beer-badge" title="Alcohol — age restriction applies">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
+                          <path d="M3 8h14a4 4 0 0 1 0 8H6"/>
+                          <path d="M7 8V6a2 2 0 0 1 2-2h1a4 4 0 0 1 3.7 2.1"/>
+                          <path d="M7 8V5a2 2 0 0 1 2-2"/>
+                        </svg>
+                      </span>
+                    )}
+                    {item.name}
+                    {item.variantName ? ` - ${item.variantName}` : ''}
+                    {` x${item.quantity}`}
                   </span>
-                )}
-                {item.name}
-                {item.variantName ? ` - ${item.variantName}` : ''}
-                {` x${item.quantity}`}
-              </span>
-              <span className="checkout-view__item-price">${(item.price * item.quantity).toFixed(2)}</span>
-            </div>
-          ))}
+                </div>
+                <span className="checkout-view__item-price">${(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+            )
+          })}
 
           <div className="checkout-view__divider" />
 
