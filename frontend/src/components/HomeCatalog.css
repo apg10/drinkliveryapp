@@ -150,6 +150,19 @@
   z-index: 1;
 }
 
+.premium-hero__eyebrow {
+  width: fit-content;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 107, 74, 0.14);
+  color: var(--primary-container);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 180, 163, 0.18);
+}
+
 .premium-hero__title {
   font-family: var(--font-headline);
   font-size: clamp(23px, 5.5vw, 30px);
@@ -167,6 +180,54 @@
   margin: 0;
 }
 
+.premium-hero__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  margin-top: 0.15rem;
+}
+
+.premium-hero__primary,
+.premium-hero__secondary {
+  min-height: 2.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.premium-hero__primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 12px 28px rgba(255, 107, 74, 0.24);
+}
+
+.premium-hero__secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--primary-container);
+  border-color: rgba(255, 180, 163, 0.18);
+}
+
+.premium-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.premium-hero__stats span {
+  padding: 0.55rem 0.45rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--on-surface);
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
 .premium-hero__age {
   display: flex;
   align-items: center;
@@ -177,6 +238,88 @@
   opacity: 0.65;
   font-weight: 500;
   padding-top: 2px;
+}
+
+/* ---------- App Home Shortcuts ---------- */
+
+.home-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.home-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-height: 5.25rem;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-high);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--on-surface);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.home-action--featured {
+  background:
+    radial-gradient(circle at 86% 8%, rgba(255, 180, 163, 0.24), transparent 34%),
+    linear-gradient(135deg, rgba(255, 107, 74, 0.18), var(--surface-container-high));
+  border-color: rgba(255, 180, 163, 0.22);
+}
+
+.home-action__label {
+  font-family: var(--font-headline);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.home-action__copy {
+  max-width: 28rem;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.home-story {
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.home-story__title {
+  margin: 0 0 var(--spacing-sm);
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--on-surface);
+}
+
+.home-story__steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.home-story__steps span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.45rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-container-high);
+  color: var(--primary-container);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
 }
 
 /* ---------- Premium Chips ---------- */
@@ -597,9 +740,9 @@
   gap: 2px;
   color: var(--on-surface-variant);
   transition: color 0.2s ease;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  padding: 0 var(--spacing-md);
+  padding: 0 0.45rem;
   border-radius: var(--radius-md);
   white-space: nowrap;
   border: none;

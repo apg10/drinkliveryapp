@@ -350,7 +350,9 @@ function AllRoutes() {
               onOpenCart={() => navigate('/cart')}
               onOpenAdmin={() => navigate('/admin/orders')}
               onNavigateAccount={() => navigate('/account')}
+              onNavigateSupport={() => navigate('/support')}
               onNavigatePartyBuilder={() => navigate('/party-builder')}
+              onNavigateExtras={() => navigate('/extras')}
               cartCount={app.cartTotalItems}
               cartSubtotal={app.cartSubtotal}
             />

@@ -26,7 +26,17 @@ const MOCKTAIL_ICON = (
   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 8 7h8l-4-5z"/><path d="M12 7v15"/><path d="M8 22h8"/></svg>
 )
 
-function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, onNavigateAccount, onNavigatePartyBuilder, cartCount = 0, cartSubtotal = 0 }) {
+function HomeCatalog({
+  onOpenDetail,
+  onOpenCart,
+  onOpenAdmin,
+  onNavigateAccount,
+  onNavigateSupport,
+  onNavigatePartyBuilder,
+  onNavigateExtras,
+  cartCount = 0,
+  cartSubtotal = 0,
+}) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [categories, setCategories] = useState([])
@@ -142,14 +152,60 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, onNavigateAccount,
         >
           <div className="premium-hero__glow" aria-hidden="true" />
           <div className="premium-hero__inner">
+            <span className="premium-hero__eyebrow">Panama cocktail delivery</span>
             <h1 className="premium-hero__title">Tonight Starts Here</h1>
             <p className="premium-hero__subtitle">Premium cocktail kits delivered cold, sealed, and ready to serve.</p>
+            <div className="premium-hero__actions" aria-label="Start ordering">
+              <button className="premium-hero__primary" onClick={() => document.getElementById('popular-tonight')?.scrollIntoView({ behavior: 'smooth' })}>
+                Shop kits
+              </button>
+              {onNavigatePartyBuilder && (
+                <button className="premium-hero__secondary" onClick={onNavigatePartyBuilder}>
+                  Build party box
+                </button>
+              )}
+            </div>
+            <div className="premium-hero__stats" aria-label="Delivery highlights">
+              <span>Cold sealed kits</span>
+              <span>Fresh garnish</span>
+              <span>ID checked</span>
+            </div>
             <div className="premium-hero__age">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M12 9v4"/><circle cx="12" cy="16" r=".5"/></svg>
               <span>Must be of legal drinking age to purchase alcohol</span>
             </div>
           </div>
         </motion.section>
+
+        <motion.section
+          className="home-actions"
+          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={!reducedMotion ? { type: 'spring', stiffness: 380, damping: 28, mass: 0.9, delay: 0.1 } : undefined}
+          aria-label="Drinklivery app shortcuts"
+        >
+          <button className="home-action home-action--featured" onClick={() => onNavigatePartyBuilder?.()}>
+            <span className="home-action__label">Party Builder</span>
+            <span className="home-action__copy">Tell us the group size and we guide the box.</span>
+          </button>
+          <button className="home-action" onClick={() => onNavigateExtras?.()}>
+            <span className="home-action__label">Extras</span>
+            <span className="home-action__copy">Ice, mixers, cups and garnish add-ons.</span>
+          </button>
+          <button className="home-action" onClick={() => onNavigateSupport?.()}>
+            <span className="home-action__label">Help</span>
+            <span className="home-action__copy">Delivery zones, ID policy and payment help.</span>
+          </button>
+        </motion.section>
+
+        <section className="home-story" aria-label="How Drinklivery works">
+          <h2 className="home-story__title">Your bar cart, handled</h2>
+          <div className="home-story__steps">
+            <span>Pick a kit</span>
+            <span>Add extras</span>
+            <span>Serve cold</span>
+          </div>
+        </section>
 
         {/* Horizontal category chips */}
         <motion.section
@@ -217,7 +273,7 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, onNavigateAccount,
       )}
 
       {/* Product grid */}
-          <h2 className="premium-grid__heading">Popular Tonight</h2>
+          <h2 className="premium-grid__heading" id="popular-tonight">Popular Tonight</h2>
 
         <section className="premium-grid">
           {visibleProducts.map(product => {
@@ -349,11 +405,29 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, onNavigateAccount,
             </svg>
             <span>Explore</span>
           </button>
+          <button className="premium-nav-item" aria-label="Party Builder" onClick={() => onNavigatePartyBuilder?.()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 2h8l-2 7h5l-9 13 2-9H7l1-11Z"/>
+            </svg>
+            <span>Party</span>
+          </button>
+          <button className="premium-nav-item" aria-label="Extras" onClick={() => onNavigateExtras?.()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            <span>Extras</span>
+          </button>
           <button className="premium-nav-item" aria-label="Cart" onClick={onOpenCart}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             <span>{cartCount > 0 ? `Box (${cartCount})` : 'Box'}</span>
+          </button>
+          <button className="premium-nav-item" aria-label="Account" onClick={() => onNavigateAccount?.()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+            </svg>
+            <span>Account</span>
           </button>
         </div>
       </nav>
