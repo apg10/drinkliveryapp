@@ -25,12 +25,22 @@ export default function PartyBuilder({ onBrowseCatalog }) {
   const isMocktail = style === 'Mocktail'
 
   return (
-    <div className="party-builder">
-      {/* Header */}
-      <div className="party-builder__header">
-        <h1 className="party-builder__title">Party Builder</h1>
-        <p className="party-builder__subtitle">Tell us your guest count and we'll suggest a cocktail box.</p>
-      </div>
+    <div className="party-builder app-subview">
+      <header className="app-subview__topbar">
+        <button className="app-subview__back" type="button" onClick={() => onBrowseCatalog?.()} aria-label="Back to catalog">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span className="app-subview__brand">Drinklivery</span>
+        <span className="app-subview__spacer" />
+      </header>
+
+      <main className="app-subview__body">
+        {/* Header */}
+        <div className="party-builder__header glass-panel">
+          <span className="party-builder__eyebrow">Planner</span>
+          <h1 className="party-builder__title">Party Builder</h1>
+          <p className="party-builder__subtitle">Tell us your guest count and we'll suggest a cocktail box.</p>
+        </div>
 
       {/* Guest count selector */}
       <div className="party-builder__section">
@@ -117,6 +127,7 @@ export default function PartyBuilder({ onBrowseCatalog }) {
           Note: Party Builder currently provides frontend-only recommendations. True bundle generation requires backend support for bundle orders or a supported cart item schema.
         </p>
       </div>
+      </main>
     </div>
   )
 }

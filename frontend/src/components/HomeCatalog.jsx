@@ -258,20 +258,6 @@ function HomeCatalog({
           </div>
         </motion.section>
 
-      {onNavigatePartyBuilder && (
-        <div className="party-builder-cta">
-          <button className="party-builder-cta__btn" onClick={onNavigatePartyBuilder}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8 2l4 4-4 4"/>
-              <path d="M16 2h4a2 2 0 012 2v12a2 2 0 01-2 2h-4"/>
-              <path d="M20 18l-4-4 4-4"/>
-              <path d="M4 6h4l-4 4-4-4z" transform="translate(0, 16)"/>
-            </svg>
-            Build a party box
-          </button>
-        </div>
-      )}
-
       {/* Product grid */}
           <h2 className="premium-grid__heading" id="popular-tonight">Popular Tonight</h2>
 
