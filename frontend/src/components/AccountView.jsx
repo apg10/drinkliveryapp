@@ -5,23 +5,33 @@ function AccountView({ order = null }) {
   const navigate = useNavigate()
 
   return (
-    <div className="account-view">
-      {/* Hero */}
-      <motion.section
-        className="account-hero"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-      >
-        <div className="account-hero__avatar">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 20c0-4 4-7 8-7s8 3 8 7" />
-          </svg>
-        </div>
-        <h1 className="account-hero__title">Account</h1>
-        <p className="account-hero__subtitle">Your cocktail nights, orders, and delivery preferences.</p>
-      </motion.section>
+    <div className="account-view app-subview">
+      <header className="app-subview__topbar">
+        <button className="app-subview__back" type="button" onClick={() => navigate('/')} aria-label="Back to catalog">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span className="app-subview__brand">Drinklivery</span>
+        <span className="app-subview__spacer" />
+      </header>
+
+      <main className="app-subview__body account-view__body">
+        {/* Hero */}
+        <motion.section
+          className="account-hero"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+        >
+          <div className="account-hero__avatar">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 4-7 8-7s8 3 8 7" />
+            </svg>
+          </div>
+          <span className="account-hero__eyebrow">Guest profile</span>
+          <h1 className="account-hero__title">Account</h1>
+          <p className="account-hero__subtitle">Your cocktail nights, orders, and delivery preferences.</p>
+        </motion.section>
 
       {/* Profile Basics */}
       <section className="account-section">
@@ -79,6 +89,7 @@ function AccountView({ order = null }) {
           Back to catalog
         </button>
       </div>
+      </main>
     </div>
   )
 }

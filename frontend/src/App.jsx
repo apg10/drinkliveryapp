@@ -304,6 +304,13 @@ function CartViewInner() {
               </button>
             </div>
 
+            <div className="cart-view__mobile-checkout">
+              <button className="cart-view__checkout-btn" onClick={() => navigate('/checkout')}>
+                Continue to checkout
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+
             <div className="cart-view__summary glass-panel">
               <div className="cart-view__summary-header-row"><span className="cart-view__summary-title">Box summary</span></div>
               <div className="cart-view__summary-row"><span>Subtotal</span><span>${cartSubtotal.toFixed(2)}</span></div>
