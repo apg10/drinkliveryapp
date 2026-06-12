@@ -3,7 +3,7 @@ import { getPublicDeliveryZones, createPublicOrder } from '../api.js'
 
 const TENANT_SLUG = 'drinklivery-panama'
 
-export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onBackToCart, onBackToCatalog, onOrderCreated }) {
+export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onBackToCart, onBackToCatalog, onOrderCreated, onOpenExtras }) {
   const isEmpty = cartItems.length === 0
   const hasAlcoholic = cartItems.some(item => item.isAlcoholic === true)
 
@@ -30,6 +30,9 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
   const [selectedZoneId, setSelectedZoneId] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
+
+  // Validation summary for display near submit button
+  const [validationIssues, setValidationIssues] = useState([])
 
   const setField = (section, key, value) => setForm(prev => ({ ...prev, [section]: { ...prev[section], [key]: value } }))
   const setFieldRoot = (key, value) => setForm(prev => ({ ...prev, [key]: value }))
@@ -86,6 +89,12 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
       return
     }
 
+    // Double-check against computed validation (includes min-order gate)
+    if (!canSubmit) {
+      setSubmitError('Please complete all required fields and meet any area minimum order before placing your order.')
+      return
+    }
+
     if (!onOrderCreated) {
       setSubmitError('Order confirmation callback is not available.')
       return
@@ -137,17 +146,117 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
 
   const handleSubmitClick = () => {
     setSubmitError(null)
+    setValidationIssues(computedValidationIssues)
     handleSubmit()
   }
 
-  const canSubmit = !isEmpty && selectedZoneId && form.terms_accepted && (hasAlcoholic ? form.age_confirmed_by_customer : true)
+  // ---------- Validation summary logic (mirrors validateBeforeSubmit) ----------
+  const _zone = zones.find(z => z.id === selectedZoneId) || null
 
+  function computeValidation() {
+    const issues = []
+
+    if (isEmpty) {
+      issues.push({ severity: 'error', msg: 'Cart is empty.' })
+      return { issues, canSubmit: false }
+    }
+
+    if (!selectedZoneId) {
+      issues.push({ severity: 'warning', msg: 'Please select a delivery area.' })
+    } else {
+      const minOrder = _zone ? Number(_zone.minimum_order_amount) : null
+      if (minOrder != null && minOrder > cartSubtotal) {
+        issues.push({ severity: 'warning', msg: `Minimum order for this area is $${minOrder.toFixed(2)}. Your subtotal is $${cartSubtotal.toFixed(2)}.` })
+      }
+    }
+
+    if (!form.terms_accepted) {
+      issues.push({ severity: 'warning', msg: 'Please accept the delivery terms to continue.' })
+    }
+
+    if (hasAlcoholic && !form.age_confirmed_by_customer) {
+      issues.push({ severity: 'warning', msg: 'Please confirm the receiver is of legal drinking age.' })
+    }
+
+    const fields = [
+      { required: !!form.customer.full_name.trim(), label: 'full name', key: 'customer_full_name' },
+      { required: !!form.customer.phone.trim(), label: 'phone number', key: 'customer_phone' },
+      { required: !!form.address.address_line.trim(), label: 'address line', key: 'address_address_line' },
+      { required: !!form.address.city.trim(), label: 'city', key: 'address_city' },
+      { required: !!form.scheduled_date, label: 'scheduled date', key: 'scheduled_date' },
+      { required: !!form.scheduled_time_window.trim(), label: 'time window', key: 'scheduled_time_window' },
+      { required: !!form.payment_method, label: 'payment method', key: 'payment_method' },
+    ]
+
+    const missingFields = fields.filter(f => !f.required)
+    if (missingFields.length > 0) {
+      const labels = missingFields.map(f => f.label).join(', ')
+      issues.push({ severity: 'warning', msg: `Missing required field(s): ${labels}.` })
+    }
+
+    const canSubmit = issues.length === 0
+    return { canSubmit, issues }
+  }
+
+  const { canSubmit, issues: computedValidationIssues } = computeValidation()
+
+  // ---------- Payment method display labels (submitted values unchanged) ----------
   const PAYMENT_OPTIONS = [
-    { value: 'CASH', label: 'CASH' },
-    { value: 'TRANSFER', label: 'TRANSFER' },
-    { value: 'YAPPY_MANUAL', label: 'YAPPY_MANUAL' },
-    { value: 'OTHER_MANUAL', label: 'OTHER_MANUAL' },
+    { value: 'CASH', label: 'Cash on delivery' },
+    { value: 'TRANSFER', label: 'Bank transfer' },
+    { value: 'YAPPY_MANUAL', label: 'Yappy' },
+    { value: 'OTHER_MANUAL', label: 'Other manual payment' },
   ]
+
+  const PAYMENT_INSTRUCTIONS = {
+    CASH: (
+      <>
+        <span className="checkout-payment-instruction__heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M19 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><path d="M16 10a3 3 0 0 0-6 0"/></svg>
+          Cash on delivery
+        </span>
+        <p className="checkout-payment-instruction__body">Pay with cash when your order arrives. Payment status is pending until collected at the door.</p>
+      </>
+    ),
+    TRANSFER: (
+      <>
+        <span className="checkout-payment-instruction__heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Bank transfer
+        </span>
+        <p className="checkout-payment-instruction__body">Payment status starts as pending. You will receive bank transfer instructions after your order is created, and payment must be confirmed before we begin preparation.</p>
+      </>
+    ),
+    YAPPY_MANUAL: (
+      <>
+        <span className="checkout-payment-instruction__heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Yappy
+        </span>
+        <p className="checkout-payment-instruction__body">Payment status starts as pending. Your order will be placed with a pending status, and the team will confirm your Yappy payment manually before beginning preparation.</p>
+      </>
+    ),
+    OTHER_MANUAL: (
+      <>
+        <span className="checkout-payment-instruction__heading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Other manual payment
+        </span>
+        <p className="checkout-payment-instruction__body">Payment status starts as pending until confirmed. The team will coordinate the manual payment method with you after your order is created.</p>
+      </>
+    ),
+  }
+
+  const computedPaymentInstruction = PAYMENT_INSTRUCTIONS[form.payment_method] || null
+
+  // Brand positioning copy (product reinforcement)
+  const brandTagline = 'Premium cocktail kits delivered cold, sealed, and ready to serve.'
+
+  function renderBrandTagline() {
+    return (
+      <p className="checkout-view__brand-tagline">{brandTagline}</p>
+    )
+  }
 
   const deliveryNote = 'Our partners practice responsible delivery. You must present a valid physical ID at delivery to confirm you are of legal drinking age.'
 
@@ -161,6 +270,7 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
           <h1 className="checkout-view__title">Drinklivery</h1>
           <div className="checkout-view__spare" />
         </div>
+        {renderBrandTagline()}
 
         <div className="checkout-view__body">
           <div className="checkout-view__empty">
@@ -221,6 +331,7 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
     return (
       <section className="delivery-zones-section" aria-label="Delivery zones">
         <h2 className="delivery-zones-section__title">Select delivery area</h2>
+        {renderBrandTagline()}
         <div className="delivery-zones-section__cards">
           {zones.map(zone => {
             const isSelected = zone.id === selectedZoneId
@@ -246,6 +357,9 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
                   <span className="delivery-zone-card__radio" />
                   <div className="delivery-zone-card__info">
                     <h3 className="delivery-zone-card__name">{zone.name}</h3>
+                                        {isSelected && (
+                      <span className="delivery-zone-card__selected-tag">Selected</span>
+                    )}
                     <span className="delivery-zone-card__meta">{zone.city}</span>
                     <span className="delivery-zone-card__delivery-fee">${baseFee.toFixed(2)}</span>
                     {minOrderText && <span className="delivery-zone-card__min-order">{minOrderText}</span>}
@@ -268,6 +382,7 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
         <h1 className="checkout-view__title">Drinklivery</h1>
         <div className="checkout-view__spare" />
       </div>
+      {renderBrandTagline()}
 
       <div className="checkout-view__body">
         <h2 className="checkout-view__section-title">Checkout</h2>
@@ -392,8 +507,21 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
                   {PAYMENT_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
-                </select>
-              </label>
+              </select>
+               </label>
+              {form.payment_method && (
+                <div className="checkout-view__payment-instruction glass-panel" aria-live="polite">
+                  {computedPaymentInstruction}
+                </div>
+              )}
+               {/* Compliance note for alcoholic carts appears near payment instructions */}
+              {hasAlcoholic && (
+                <div className="checkout-view__alcohol-compliance-note glass-panel" role="note">
+                  <p className="checkout-view__alcohol-compliance-text">
+                    This order contains alcoholic items. The receiver must present a valid physical ID at delivery to confirm they are of legal drinking age. We do not collect or store ID images or document numbers.
+                  </p>
+                </div>
+              )}
               <label className="checkout-view__field checkout-view__field--wide">
                 <span className="checkout-view__label">Customer notes optional</span>
                 <textarea
@@ -425,7 +553,9 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
                 />
                 <span className="checkout-view__checkbox-text">
                   <span className="checkout-view__required-asterisk">*</span>
-                  I confirm the receiver is of legal drinking age and will present a valid physical ID at delivery.
+                  <span className="checkout-view__required-asterisk">*</span>
+                  I confirm the receiver is of legal drinking age (21+) and will present a valid physical ID in person at delivery.<br />
+                  We do not collect or store any ID images or document numbers.
                 </span>
               </label>
             )}
@@ -440,6 +570,16 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
             {submitting ? 'Submitting...' : 'Place order'}
           </button>
 
+          {computedValidationIssues.length > 0 && (
+            <div className="checkout-view__validation-summary" role="status">
+              {computedValidationIssues.map((issue, idx) => (
+                <span key={idx} className={`checkout-validation-issue checkout-validation-issue--${issue.severity}`}>
+                  {issue.msg}
+                </span>
+              ))}
+            </div>
+          )}
+
           {submitError && (
             <p className="checkout-view__submit-error" role="alert">
               {submitError}
@@ -448,6 +588,8 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
         </div>
 
         <div className="checkout-view__summary glass-panel">
+          <p className="checkout-view__summary-kit-label">Your cocktail box</p>
+          <p className="checkout-view__summary-kit-tagline">Chilled, sealed, ready to serve</p>
           {cartItems.map(item => {
             const hasThumb = item.imageUrl && item.imageUrl !== ''
             return (
@@ -497,6 +639,14 @@ export default function CheckoutView({ cartItems, cartSubtotal, deliveryFee, onB
             <span>Total</span>
             <span className="checkout-view__total-value">${total}</span>
           </div>
+
+          {onOpenExtras && (
+            <div className="checkout-view__extras-info glass-panel">
+              <p className="checkout-view__extras-info-text">Extras are coming soon. Preview add-ons before checkout to avoid losing checkout progress.</p>
+              <span className="checkout-view__extras-warning">Your checkout form is not saved if you leave this screen.</span>
+              <button className="secondary-link-btn checkout-view__extras-info-btn" type="button" onClick={onOpenExtras}>Preview add-ons before checkout</button>
+            </div>
+          )}
         </div>
       </div>
     </div>

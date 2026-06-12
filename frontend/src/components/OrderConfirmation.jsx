@@ -1,4 +1,4 @@
-export default function OrderConfirmation({ order, onReturnToCatalog, onTrackOrder }) {
+export default function OrderConfirmation({ order, onReturnToCatalog, onTrackOrder, onViewDetails }) {
   return (
     <div className="order-confirmation">
       <div className="order-confirmation__header">
@@ -21,13 +21,19 @@ export default function OrderConfirmation({ order, onReturnToCatalog, onTrackOrd
               <polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
           </div>
-          <h2 className="order-confirmation__hero-title">Order placed</h2>
-          <p className="order-confirmation__hero-text">Your order has been received and is pending confirmation.</p>
+          <h2 className="order-confirmation__hero-title">Order confirmed</h2>
+          <p className="order-confirmation__hero-text">Your cocktail box is confirmed. Your kit is packed cold, sealed, and ready to serve.</p>
 
           <div className="order-confirmation__code-section">
             <span className="order-confirmation__code-label">Order number</span>
             <span className="order-confirmation__code-value">{order?.order_code || 'N/A'}</span>
           </div>
+
+          {order?.payment_method && !['CASH'].includes(order.payment_method) && (
+            <p className="order-confirmation__payment-note">
+              We will confirm payment before beginning preparation.
+            </p>
+          )}
         </div>
 
         <dl className="order-confirmation__details">
@@ -53,7 +59,28 @@ export default function OrderConfirmation({ order, onReturnToCatalog, onTrackOrd
           </div>
         </dl>
 
-        <div className="order-confirmation__tracking-note glass-panel">
+        <div className="order-confirmation__what-next glass-panel">
+            <h3 className="order-confirmation__what-next-title">What happens next</h3>
+            <ol className="order-confirmation__what-next-steps">
+              <li className="order-confirmation__what-next-step">
+                <span className="step-number">1</span> Order received and verified
+              </li>
+              <li className="order-confirmation__what-next-step">
+                <span className="step-number">2</span> Payment and age confirmation
+              </li>
+              <li className="order-confirmation__what-next-step">
+                <span className="step-number">3</span> Cocktail kit prepared by our partners
+              </li>
+              <li className="order-confirmation__what-next-step">
+                <span className="step-number">4</span> Sealed and packed cold for delivery
+              </li>
+              <li className="order-confirmation__what-next-step">
+                <span className="step-number">5</span> Out for delivery to your address
+              </li>
+            </ol>
+          </div>
+
+          <div className="order-confirmation__tracking-note glass-panel">
           <span className="order-confirmation__tracking-icon">!</span>
           <p className="order-confirmation__tracking-text">
             Track your order status in real time.
@@ -68,7 +95,13 @@ export default function OrderConfirmation({ order, onReturnToCatalog, onTrackOrd
           Track order
         </button>
 
-        <button className="order-confirmation__back-to-catalog" onClick={onReturnToCatalog}>
+        {onViewDetails && (
+          <button className="order-details-view__action-btn" onClick={onViewDetails}>
+            View order details
+          </button>
+        )}
+
+        <button className="order-confirmation__return-btn" onClick={onReturnToCatalog}>
           Return to catalog
         </button>
       </div>

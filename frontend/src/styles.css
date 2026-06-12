@@ -108,6 +108,7 @@
   --label-caps-font-size: 12px;
   --label-caps-line-height: 16px;
   --label-caps-letter-spacing: 0.05em;
+  --label-sm: 13px;
 }
 
 /* ---------- Reset & Base ---------- */
@@ -3821,4 +3822,31 @@ a {
     min-width: 7rem;
     padding: 0 1.5rem;
   }
+}
+
+/* ===== Checkout extras info (FE-029A) ===== */
+
+.checkout-view__extras-info {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(238,192,88,0.06), rgba(160,215,87,0.06));
+}
+
+.checkout-view__extras-info-text {
+  font-size: var(--label-sm);
+  color: var(--on-surface-variant);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.checkout-view__extras-warning {
+  font-size: var(--label-caps);
+  color: var(--error);
+  margin-top: var(--spacing-xs);
+}
+
+.checkout-view__extras-info-btn {
+  font-size: var(--label-sm);
+  color: var(--primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
 }

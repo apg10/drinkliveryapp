@@ -1,8 +1,22 @@
 import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { getPublicCatalog } from '../api'
 import './HomeCatalog.css'
 
 const TENANT_SLUG = 'drinklivery-panama'
+
+function useReducedMotionSettings() {
+  const [reduced, setReduced] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduced(mql.matches)
+    const handler = (e) => setReduced(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
+  return reduced
+}
 
 const ALCOHOLIC_ICON = (
   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2 12 7 16 2"/><path d="M12 7v13"/><path d="M8 22h8"/></svg>
@@ -12,7 +26,7 @@ const MOCKTAIL_ICON = (
   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 8 7h8l-4-5z"/><path d="M12 7v15"/><path d="M8 22h8"/></svg>
 )
 
-function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, cartSubtotal = 0 }) {
+function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, onNavigateAccount, onNavigatePartyBuilder, cartCount = 0, cartSubtotal = 0 }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [categories, setCategories] = useState([])
@@ -20,6 +34,8 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
   const [activeCat, setActiveCat] = useState(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [failedImages, setFailedImages] = useState(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
+  const reducedMotion = useReducedMotionSettings()
 
   function handleImageError(imageUrl) {
     setFailedImages(prev => {
@@ -66,9 +82,21 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
     setActiveCat(categorySlug)
   }
 
-  const visibleProducts = activeCat
-    ? products.filter(p => p.categorySlug === activeCat)
+  const filteredBySearch = searchQuery.trim()
+    ? products.filter(p => {
+        const q = searchQuery.toLowerCase()
+        return (
+          (p.name || '').toLowerCase().includes(q) ||
+          (p.description || '').toLowerCase().includes(q) ||
+          (p.categoryName || '').toLowerCase().includes(q) ||
+          String((p.is_alcoholic === true) ? 'alcoholic' : 'mocktail').includes(q)
+        )
+      })
     : products
+
+  const visibleProducts = activeCat
+    ? filteredBySearch.filter(p => p.categorySlug === activeCat)
+    : filteredBySearch
 
   return (
     <>
@@ -95,7 +123,7 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
                 </svg>
               </button>
             )}
-            <button className="premium-topbar__avatar" aria-label="Profile">
+            <button className="premium-topbar__avatar" aria-label="Profile" onClick={() => onNavigateAccount?.()}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
               </svg>
@@ -106,20 +134,30 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
 
       <main className="premium-main">
         {/* Hero */}
-        <section className="premium-hero">
+        <motion.section
+          className="premium-hero"
+          initial={reducedMotion ? false : { opacity: 0, y: 16 }}
+          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={!reducedMotion ? { type: 'spring', stiffness: 380, damping: 28, mass: 0.9, delay: 0.05 } : undefined}
+        >
           <div className="premium-hero__glow" aria-hidden="true" />
           <div className="premium-hero__inner">
-            <h1 className="premium-hero__title">Cocktails ready for your night</h1>
-            <p className="premium-hero__subtitle">Premium, bar-quality drinks delivered chilled to your door.</p>
+            <h1 className="premium-hero__title">Tonight Starts Here</h1>
+            <p className="premium-hero__subtitle">Premium cocktail kits delivered cold, sealed, and ready to serve.</p>
             <div className="premium-hero__age">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M12 9v4"/><circle cx="12" cy="16" r=".5"/></svg>
               <span>Must be of legal drinking age to purchase alcohol</span>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Horizontal category chips */}
-        <section className="premium-chips">
+        <motion.section
+          className="premium-chips"
+          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={!reducedMotion ? { type: 'spring', stiffness: 380, damping: 28, mass: 0.9, delay: 0.12 } : undefined}
+        >
           <div className="premium-chips__list">
             <button
               className={`premium-chip ${activeCat === null ? 'premium-chip--active' : 'premium-chip--inactive'}`}
@@ -128,29 +166,75 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
               All
             </button>
             {categories.map(cat => (
-              <button
+              <motion.button
                 key={cat.id || cat.slug}
                 className={`premium-chip ${activeCat === cat.slug ? 'premium-chip--active' : 'premium-chip--inactive'}`}
                 onClick={() => handleCatToggle(cat.slug)}
+                whileTap={!reducedMotion ? { scale: 0.94 } : undefined}
               >
                 {cat.name}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </section>
+        </motion.section>
+        {/* Search input */}
+        <motion.section
+          className="premium-search"
+          initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={!reducedMotion ? { type: 'spring', stiffness: 380, damping: 28, mass: 0.9, delay: 0.06 } : undefined}
+        >
+          <div className="premium-search__input-wrap">
+            <svg className="premium-search__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input
+              className="premium-search__input"
+              type="text"
+              placeholder="Search cocktails, mocktails, add-ons..."
+              aria-label="Search products"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button className="premium-search__clear" onClick={() => setSearchQuery('')} aria-label="Clear search">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            )}
+          </div>
+        </motion.section>
 
-        {/* Product grid */}
+      {onNavigatePartyBuilder && (
+        <div className="party-builder-cta">
+          <button className="party-builder-cta__btn" onClick={onNavigatePartyBuilder}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 2l4 4-4 4"/>
+              <path d="M16 2h4a2 2 0 012 2v12a2 2 0 01-2 2h-4"/>
+              <path d="M20 18l-4-4 4-4"/>
+              <path d="M4 6h4l-4 4-4-4z" transform="translate(0, 16)"/>
+            </svg>
+            Build a party box
+          </button>
+        </div>
+      )}
+
+      {/* Product grid */}
+          <h2 className="premium-grid__heading">Popular Tonight</h2>
+
         <section className="premium-grid">
           {visibleProducts.map(product => {
             const alcoholic = product.is_alcoholic === true
             const badgeText = alcoholic ? 'Alcoholic' : 'Non-alcoholic'
+            const cardAnimConfig = !reducedMotion ? { type: 'spring', stiffness: 320, damping: 26, mass: 0.85, delay: 0.06 } : undefined
 
             return (
-              <article
+              <motion.article
                 key={product.id}
                 className="premium-card glass-panel"
                 style={{ cursor: 'pointer' }}
                 onClick={() => onOpenDetail && onOpenDetail(product.slug || product.id)}
+                initial={reducedMotion ? false : { opacity: 0, y: 24, scale: 0.975 }}
+                animate={reducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                exit={!reducedMotion ? { opacity: 0, scale: 0.95 } : undefined}
+                transition={cardAnimConfig}
               >
                 <div className="premium-card__visual">
                   <span
@@ -177,6 +261,7 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
                   {product.description && (
                     <p className="premium-card__desc">{product.description}</p>
                   )}
+                  <span className="premium-card__kit-copy">Mix + garnish + ice</span>
                   <div className="premium-card__footer">
                     <div className="premium-card__price-wrap">
                       <span className="premium-card__price">${product.base_price}</span>
@@ -184,38 +269,75 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
                         <span className="premium-card__servings">Serves {product.servings}</span>
                       )}
                     </div>
-                    <button
+                    <motion.button
                       className="premium-card__add"
                       aria-label={`Add ${product.name} to cart`}
                       onClick={(event) => {
                         event.stopPropagation()
                         onOpenDetail && onOpenDetail(product.slug || product.id)
                       }}
+                      whileHover={!reducedMotion ? { scale: 1.08 } : undefined}
+                      whileTap={!reducedMotion ? { scale: 0.9 } : undefined}
+                      transition={!reducedMotion ? { type: 'spring', stiffness: 400, damping: 18 } : undefined}
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             )
           })}
+        {visibleProducts.length === 0 && (searchQuery || activeCat) && !error && (
+          <div className="catalog-state catalog-empty catalog-filtered" role="status">
+            <span className="catalog-empty-title">No matching cocktail kits</span>
+            <span className="catalog-empty-sub">Try adjusting your search or category filter.</span>
+          </div>
+        )}
         </section>
       </main>
 
       {/* Floating cart bar */}
-      {cartCount > 0 && (
-        <div className="premium-cart-bar">
-          <button className="premium-cart-bar__btn" onClick={onOpenCart}>
-            <div className="premium-cart-bar__info">
-              <span className="premium-cart-bar__count">{cartCount}</span>
-              <div className="premium-cart-bar__text">
-                <span className="premium-cart-bar__label">Total</span>
-                <span className="premium-cart-bar__total-val">${cartSubtotal.toFixed(2)}</span>
-              </div>
+      {reducedMotion ? (
+        <AnimatePresence initial={false}>
+          {cartCount > 0 && (
+            <div className="premium-cart-bar" key="cart-bar-static">
+              <button className="premium-cart-bar__btn" onClick={onOpenCart}>
+                <div className="premium-cart-bar__info">
+                  <span className="premium-cart-bar__count">{cartCount}</span>
+                  <div className="premium-cart-bar__text">
+                    <span className="premium-cart-bar__label">Total</span>
+                    <span className="premium-cart-bar__total-val">${cartSubtotal.toFixed(2)}</span>
+                  </div>
+                </div>
+                <span className="premium-cart-bar__cta">View box</span>
+              </button>
             </div>
-            <span className="premium-cart-bar__cta">View cart</span>
-          </button>
-        </div>
+          )}
+        </AnimatePresence>
+      ) : (
+        <AnimatePresence initial={false} mode="wait">
+          {cartCount > 0 && (
+            <motion.div
+              className="premium-cart-bar"
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.9 }}
+              key="cart-bar"
+            >
+              <button className="premium-cart-bar__btn" onClick={onOpenCart}>
+                <div className="premium-cart-bar__info">
+                  <span className="premium-cart-bar__count">{cartCount}</span>
+                  <div className="premium-cart-bar__text">
+                    <span className="premium-cart-bar__label">Total</span>
+                    <span className="premium-cart-bar__total-val">${cartSubtotal.toFixed(2)}</span>
+                  </div>
+                </div>
+                <span className="premium-cart-bar__cta">View box</span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
 
       {/* Bottom nav */}
@@ -231,7 +353,7 @@ function HomeCatalog({ onOpenDetail, onOpenCart, onOpenAdmin, cartCount = 0, car
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            <span>{cartCount > 0 ? `Cart (${cartCount})` : 'Cart'}</span>
+            <span>{cartCount > 0 ? `Box (${cartCount})` : 'Box'}</span>
           </button>
         </div>
       </nav>
